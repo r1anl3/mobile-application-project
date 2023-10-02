@@ -22,4 +22,12 @@ Android project: Indoor air quality monitoring application
         - Login
         - Main Dashboard
         - Setting app
-    - Authentification
+        - ...
+    - Activity:
+        - Sign in
+        - Sign up
+        - Authentification
+        - Forget password
+        - Language support
+        - ...
+    - API call: unknown
