@@ -16,7 +16,10 @@ Android project: Indoor air quality monitoring application
 
 *Task:
     - Create Github repo
-    - Main Dashboard
-    - Setting app
-    - Login, logout, sign in, forget password
-    - Authentification  
+    - UI:
+        - Homepage
+        - Resiger
+        - Login
+        - Main Dashboard
+        - Setting app
+    - Authentification
