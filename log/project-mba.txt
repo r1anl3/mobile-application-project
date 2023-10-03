@@ -21,7 +21,7 @@ Android project: Indoor air quality monitoring application
         - Register
         - Login
         - Main Dashboard
-        - Setting app.
+        - Setting app
         - ...
     - Activity:
         - Sign in
