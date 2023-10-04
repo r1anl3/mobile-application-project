@@ -23,8 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39">
+        app:layout_constraintTop_toBottomOf="@+id/btn_changeLanguage">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -33,7 +32,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tIP_userMail"
+        android:id="@+id/tIP_userPassword"
         android:layout_width="400dp"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="@+id/tIP_userName"
@@ -42,33 +41,28 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Mail" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tIP_userPassword"
-        android:layout_width="400dp"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="@+id/tIP_userMail"
-        app:layout_constraintTop_toBottomOf="@+id/tIP_userMail">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:hint="Password" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tIP_confirmPassword"
-        android:layout_width="400dp"
-        android:layout_height="60dp"
+    <Button
+        android:id="@+id/btn_signIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="SIGN IN"
+        app:layout_constraintEnd_toEndOf="@+id/tIP_userPassword"
         app:layout_constraintStart_toStartOf="@+id/tIP_userPassword"
-        app:layout_constraintTop_toBottomOf="@+id/tIP_userPassword">
+        app:layout_constraintTop_toBottomOf="@+id/tIP_userPassword" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Confirm Password" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="BACK"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signIn"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@+id/btn_signIn"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signIn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

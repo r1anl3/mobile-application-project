@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button btn_signUp;
     Button btn_signIn;
+    Button btn_changeLanguage;
+    Button btn_signInWithGoogle;
+    Button btn_resetPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_signIn = findViewById(R.id.btn_signIn);
+        btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
+        btn_signInWithGoogle = findViewById(R.id.btn_signIpWithGoogle);
+        btn_resetPassword = findViewById(R.id.btn_resetPassword);
 
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +40,17 @@ public class MainActivity extends AppCompatActivity {
                 openLogInActivity();
             }
         });
+
+        btn_changeLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLanguageChange();
+            }
+        });
+    }
+
+    public void onLanguageChange() {
+        Log.d("something", "onLanguageChange: EN");
     }
 
     private void openLogInActivity() {
@@ -43,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void openRegisterActivity() {
         Intent intent = new Intent(this, RegisterActivity.class);
+        startActivities(new Intent[]{intent});
+    }
+
+    public void openMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivities(new Intent[]{intent});
     }
 }
