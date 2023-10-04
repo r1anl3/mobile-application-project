@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Weather App</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="or">Or</string>
+    <string name="reset_your_password">Reset your password?</string>
+    <string name="continue_with_google">CONTINUE WITH GOOGLE</string>
+    <string name="user_name">User Name</string>
+    <string name="mail">Mail</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="back">BACK</string>
 </resources>

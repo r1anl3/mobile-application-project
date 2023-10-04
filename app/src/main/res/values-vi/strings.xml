@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="sign_in">Đăng nhập</string>
+    <string name="sign_up">Đăng ký</string>
+    <string name="or">hoặc</string>
+    <string name="reset_your_password">Quên mật khẩu?</string>
+    <string name="continue_with_google">Tiếp tục với Google</string>
+    <string name="user_name">Tên người dùng</string>
+    <string name="mail">Mail</string>
+    <string name="password">Mật khẩu</string>
+    <string name="confirm_password">Nhập lại mật khẩu</string>
+    <string name="back">Trở về</string>
+</resources>

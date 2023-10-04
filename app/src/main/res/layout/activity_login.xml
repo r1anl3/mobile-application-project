@@ -28,7 +28,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="User Name" />
+            android:hint="@string/user_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -41,7 +41,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Password" />
+            android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="SIGN IN"
+        android:text="@string/sign_in"
         app:layout_constraintEnd_toEndOf="@+id/tIP_userPassword"
         app:layout_constraintStart_toStartOf="@+id/tIP_userPassword"
         app:layout_constraintTop_toBottomOf="@+id/tIP_userPassword" />
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="BACK"
+        android:text="@string/back"
         app:layout_constraintEnd_toEndOf="@+id/btn_signIn"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/btn_signIn"
