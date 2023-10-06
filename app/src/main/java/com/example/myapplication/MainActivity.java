@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
                 onLanguageChange();
             }
         });
+        btn_resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("something", "onClick: reset");
+            }
+        });
     }
 
     public void onLanguageChange() {

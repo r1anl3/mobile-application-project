@@ -11,4 +11,5 @@
     <string name="password">Mật khẩu</string>
     <string name="confirm_password">Nhập lại mật khẩu</string>
     <string name="back">Trở về</string>
+    <string name="welcome_back">Chào mừng trở lại</string>
 </resources>
