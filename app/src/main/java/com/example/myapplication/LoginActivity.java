@@ -18,22 +18,22 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_signIn = findViewById(R.id.btn_signIn);
-        btn_back = findViewById(R.id.btn_back);
+//        btn_signIn = findViewById(R.id.btn_signIn);
+//        btn_back = findViewById(R.id.btn_back);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
 
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openMainActivity();
-            }
-        });
-        btn_signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSignIn();
-            }
-        });
+//        btn_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openMainActivity();
+//            }
+//        });
+//        btn_signIn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onSignIn();
+//            }
+//        });
         btn_changeLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
