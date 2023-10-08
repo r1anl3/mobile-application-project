@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="or">Or</string>
+    <string name="reset_your_password">Reset your password?</string>
+    <string name="continue_with_google">CONTINUE WITH GOOGLE</string>
+    <string name="user_name">User Name</string>
+    <string name="mail">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="back">BACK</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="register_suggest" translatable="false">Are you new user? Register</string>
+    <string name="login">LOGIN</string>
+    <string name="language" translatable="false">EN</string>
+</resources>

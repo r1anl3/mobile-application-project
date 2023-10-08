@@ -1,0 +1,33 @@
+Android project: Indoor air quality monitoring application
+
+*Request:
+    - Documentation
+    - App interface
+    - A Sensor to collect air quality data? (collect data online/background)
+    - Local storage
+    - Tool to analyze data to find data trend (realtime)
+    - Alert in app (when data crossed threshold) 
+    - Extra:
+        + Cloud storage
+        + Multi language
+        + QR code support
+        + Sharing data with trusted contact through app
+    - Presentation
+
+*Task:
+    - Create Github repo
+    - UI:
+        - Homepage
+        - Register
+        - Login
+        - Main Dashboard
+        - Setting app
+        - ...
+    - Activity:
+        - Sign in
+        - Sign up
+        - Authentication
+        - Forget password
+        - Language support
+        - ...
+    - API call: unknown
