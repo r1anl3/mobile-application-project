@@ -13,5 +13,5 @@
     <string name="welcome_back">Welcome Back!</string>
     <string name="register_suggest" translatable="false">Are you new user? Register</string>
     <string name="login">LOGIN</string>
-    <string name="language">EN</string>
+    <string name="language" translatable="false">EN</string>
 </resources>
