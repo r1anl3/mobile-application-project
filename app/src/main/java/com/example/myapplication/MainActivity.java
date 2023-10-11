@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     Button btn_signUp;
     Button btn_signIn;
@@ -53,24 +53,5 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("something", "onClick: reset");
             }
         });
-    }
-
-    public void onLanguageChange() {
-        Log.d("something", "onLanguageChange: EN");
-    }
-
-    private void openLogInActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivities(new Intent[]{intent});
-    }
-
-    private void openRegisterActivity() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivities(new Intent[]{intent});
-    }
-
-    public void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivities(new Intent[]{intent});
     }
 }

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     Button btn_back;
     Button btn_signUp;
@@ -42,17 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void onLanguageChange() {
-        Log.d("something", "onLanguageChange: ");
-    }
 
     private void onSignUp() {
         Log.d("something", "onSignUp: ");
-    }
-
-    private void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivities(new Intent[]{intent});
     }
 
 }
