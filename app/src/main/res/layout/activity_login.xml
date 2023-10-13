@@ -70,7 +70,7 @@
             android:inputType="textEmailAddress"
             android:padding="16dp"
             android:textColor="#ffffff"
-            android:textColorHint="#ffffff" />
+            android:textColorHint="#808080" />
 
         <EditText
             android:id="@+id/et_password"
@@ -86,7 +86,7 @@
             android:inputType="textPassword"
             android:padding="16dp"
             android:textColor="#ffffff"
-            android:textColorHint="#ffffff" />
+            android:textColorHint="#808080" />
 
         <RelativeLayout
             android:layout_width="match_parent"
