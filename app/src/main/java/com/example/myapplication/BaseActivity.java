@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";
+    public boolean isAuthorizedByUIT = false;
+    public boolean isAuthorizedByGoogle = false;
 
     //BASE CLASS FOR INHERITED FUNCTIONS
     @Override
@@ -39,5 +41,25 @@ public class BaseActivity extends AppCompatActivity {
         //TODO: open login activity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivities(new Intent[]{intent});
+    }
+
+    public void  openDashboardActivity() {
+        //TODO: open dashboard activity
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivities(new Intent[]{intent});
+    }
+    public void signInWithGoogle() {
+        /*
+            Do something here to be authorized by Google
+            Update isAuthorizedByGoogle
+         */
+        isAuthorizedByGoogle = true;
+
+        if (isAuthorizedByGoogle) {
+            openDashboardActivity();
+        }
+        else {
+            // Pop up message show that "Can not sign in"
+        }
     }
 }

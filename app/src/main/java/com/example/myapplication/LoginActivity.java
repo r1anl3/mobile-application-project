@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class LoginActivity extends BaseActivity {
@@ -17,6 +18,7 @@ public class LoginActivity extends BaseActivity {
     Button btn_back;
     Button btn_changeLanguage;
     TextView tv_register;
+    ImageButton iBtn_google;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class LoginActivity extends BaseActivity {
         btn_back = findViewById(R.id.btn_back);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
         tv_register = findViewById(R.id.tv_register);
+        iBtn_google = findViewById(R.id.ib_google);
 
         // Set functions for components
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -67,10 +70,29 @@ public class LoginActivity extends BaseActivity {
                 openRegisterActivity();
             }
         });
+        iBtn_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open sign in with Google method
+                signInWithGoogle();
+            }
+        });
     }
 
     private void onSignIn() {
         //TODO: check sign in status, get access permission to dashboard
-        Log.d(TAG, "onSignIn: ");
+        /*
+            Do something here to be authorized by UIT
+            Update isAuthorizedByUIT
+        */
+        isAuthorizedByUIT = true;
+
+        if (isAuthorizedByUIT) {
+            openDashboardActivity();
+        }
+        else {
+            // Pop up message show that "Can not sign in"
+        }
     }
+
 }

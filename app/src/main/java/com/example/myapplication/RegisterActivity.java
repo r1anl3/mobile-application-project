@@ -50,7 +50,18 @@ public class RegisterActivity extends BaseActivity {
 
     private void onSignUp() {
         //TODO: check sign up status, get access permission to dashboard
-        Log.d(TAG, "onSignUp: ");
+        /*
+            Do something here to be authorized by UIT
+            Update isAuthorizedByUIT
+        */
+        isAuthorizedByUIT = true;
+
+        if (isAuthorizedByUIT) {
+            openDashboardActivity();
+        }
+        else {
+            // Pop up message show that "Can not sign up"
+        }
     }
 
 }

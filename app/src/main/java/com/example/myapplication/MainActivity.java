@@ -59,6 +59,13 @@ public class MainActivity extends BaseActivity {
                 onPasswordReset();
             }
         });
+        btn_signInWithGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open sign in with Google method
+                signInWithGoogle();
+            }
+        });
     }
 
     private void onPasswordReset() {
