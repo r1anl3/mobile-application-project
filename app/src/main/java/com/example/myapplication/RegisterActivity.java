@@ -27,8 +27,9 @@ public class RegisterActivity extends BaseActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Open main activity on clicked
-                openMainActivity();
+                // Return main activity on clicked
+                //openMainActivity();
+                RegisterActivity.super.onBackPressed();
             }
         });
         btn_signUp.setOnClickListener(new View.OnClickListener() {

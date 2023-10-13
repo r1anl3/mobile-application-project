@@ -15,4 +15,5 @@
     <string name="login">LOGIN</string>
     <string name="language">EN</string>
     <string name="register">Register</string>
+    <string name="press_alert">Press again to exit!</string>
 </resources>

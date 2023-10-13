@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Main Activity";
+    private boolean isBackPressedOnce = false;
     Button btn_signUp;
     Button btn_signIn;
     Button btn_changeLanguage;
@@ -72,4 +75,26 @@ public class MainActivity extends BaseActivity {
         //TODO: reset password
         Log.d(TAG, "onPasswordReset: ");
     }
+
+    @Override
+    public void onBackPressed() {
+        // Override back button press
+        if (isBackPressedOnce) {
+            // Disable back button press once
+            super.onBackPressed();
+            return;
+        }
+
+        Toast.makeText(this, R.string.press_alert, Toast.LENGTH_SHORT).show(); // Alert on double press
+        isBackPressedOnce = true; // Second press can use onBackPressed
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // After 2 second without second press, reset value
+                isBackPressedOnce = false;
+            }
+        }, 2000); // Delay 2 second
+    }
+
 }
