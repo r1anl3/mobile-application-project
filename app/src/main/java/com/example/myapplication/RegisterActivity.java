@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class RegisterActivity extends AppCompatActivity {
-
+public class RegisterActivity extends BaseActivity {
+    private static final String TAG = "Register Activity";
     Button btn_back;
     Button btn_signUp;
     Button btn_changeLanguage;
@@ -18,41 +18,51 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Find components from layout
         btn_back = findViewById(R.id.btn_back);
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
 
+        // Set functions for components
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMainActivity();
+                // Return main activity on clicked
+                //openMainActivity();
+                RegisterActivity.super.onBackPressed();
             }
         });
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Do sign up
                 onSignUp();
             }
         });
         btn_changeLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Change language on clicked
                 onLanguageChange();
             }
         });
     }
 
-    private void onLanguageChange() {
-        Log.d("something", "onLanguageChange: ");
-    }
 
     private void onSignUp() {
-        Log.d("something", "onSignUp: ");
-    }
+        //TODO: check sign up status, get access permission to dashboard
+        /*
+            Do something here to be authorized by UIT
+            Update isAuthorizedByUIT
+        */
+        isAuthorizedByUIT = true;
 
-    private void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivities(new Intent[]{intent});
+        if (isAuthorizedByUIT) {
+            openDashboardActivity();
+        }
+        else {
+            // Pop up message show that "Can not sign up"
+        }
     }
 
 }

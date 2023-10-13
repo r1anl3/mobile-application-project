@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather App</string>
+    <string name="app_name" translatable="false">ClouD</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
     <string name="or">Or</string>
@@ -11,7 +11,9 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="back">BACK</string>
     <string name="welcome_back">Welcome Back!</string>
-    <string name="register_suggest" translatable="false">Are you new user? Register</string>
+    <string name="register_suggest">Are you new user?</string>
     <string name="login">LOGIN</string>
-    <string name="language" translatable="false">EN</string>
+    <string name="language">EN</string>
+    <string name="register">Register</string>
+    <string name="press_alert">Press again to exit!</string>
 </resources>
