@@ -34,6 +34,13 @@
                 android:layout_centerHorizontal="true"
                 app:srcCompat="@drawable/logo3" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btn_changeLanguage"
+                android:layout_marginTop="32dp"
+                app:srcCompat="@drawable/globe" />
+
             <Button
                 android:id="@+id/btn_changeLanguage"
                 android:layout_width="wrap_content"
@@ -41,7 +48,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:text="@string/language"/>
         </RelativeLayout>
     </LinearLayout>
@@ -73,11 +79,11 @@
                 android:id="@+id/btn_signIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_below="@+id/tv_welcome"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="24dp"
-                android:layout_below="@+id/tv_welcome"
-                android:text="@string/sign_in" />
+                android:text="@string/sign_in"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btn_signUp"
