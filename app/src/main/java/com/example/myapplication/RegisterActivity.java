@@ -10,9 +10,9 @@ import android.widget.Button;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "Register Activity";
-    Button btn_back;
-    Button btn_signUp;
-    Button btn_changeLanguage;
+    private Button btn_back;
+    private Button btn_signUp;
+    private Button btn_changeLanguage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "Login Activity";
-    Button btn_signIn;
-    Button btn_back;
-    Button btn_changeLanguage;
-    TextView tv_register;
-    ImageButton iBtn_google;
+    private Button btn_signIn;
+    private Button btn_back;
+    private Button btn_changeLanguage;
+    private TextView tv_register;
+    private ImageButton iBtn_google;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

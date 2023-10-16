@@ -12,12 +12,14 @@ import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Main Activity";
-    private boolean isBackPressedOnce = false;
-    Button btn_signUp;
-    Button btn_signIn;
-    Button btn_changeLanguage;
-    Button btn_signInWithGoogle;
-    Button btn_resetPassword;
+    private final long delayTime = 2000;
+    private long backPressedTime;
+    private Toast mToast;
+    private Button btn_signUp;
+    private Button btn_signIn;
+    private Button btn_changeLanguage;
+    private Button btn_signInWithGoogle;
+    private Button btn_resetPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +80,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        // Override back button press
-        if (isBackPressedOnce) {
-            // Disable back button press once
+        if (backPressedTime + delayTime > System.currentTimeMillis()) { // backPressedTime = delayTime
+            mToast.cancel(); // Cancel toast after exit
             super.onBackPressed();
-            return;
+        }
+        else {
+           mToast = Toast.makeText(this, R.string.press_alert, Toast.LENGTH_SHORT); // Set text for toast
+           mToast.show();
         }
 
-        Toast.makeText(this, R.string.press_alert, Toast.LENGTH_SHORT).show(); // Alert on double press
-        isBackPressedOnce = true; // Second press can use onBackPressed
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // After 2 second without second press, reset value
-                isBackPressedOnce = false;
-            }
-        }, 2000); // Delay 2 second
+        backPressedTime = System.currentTimeMillis(); // backPressedTime = System
     }
-
 }
