@@ -44,7 +44,9 @@ public class BaseActivity extends AppCompatActivity {
     public void openMainActivity() {
         //TODO: open main activity
         Intent intent = new Intent(this, MainActivity.class);
-        startActivities(new Intent[]{intent});
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     public void openRegisterActivity() {

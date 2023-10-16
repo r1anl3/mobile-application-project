@@ -46,8 +46,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // Return main activity
-                // openMainActivity();
-                LoginActivity.super.onBackPressed();
+                 openMainActivity();
+                // LoginActivity.super.onBackPressed();
             }
         });
         btn_signIn.setOnClickListener(new View.OnClickListener() {

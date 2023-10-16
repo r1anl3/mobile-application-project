@@ -28,8 +28,8 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // Return main activity on clicked
-                //openMainActivity();
-                RegisterActivity.super.onBackPressed();
+                openMainActivity();
+                // RegisterActivity.super.onBackPressed();
             }
         });
         btn_signUp.setOnClickListener(new View.OnClickListener() {
