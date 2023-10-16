@@ -16,4 +16,9 @@
     <string name="language">EN</string>
     <string name="register">Register</string>
     <string name="press_alert">Press again to exit!</string>
+    <string name="weather_status" translatable="false">Mostly Cloudy</string>
+    <string name="data_time" translatable="false">Mon Oct 16 | 08:00 AM</string>
+    <string name="curr_temp" translatable="false">25</string>
+    <string name="degree_symbol" translatable="false">°</string>
+    <string name="greed_user">Hi, Vu</string>
 </resources>
