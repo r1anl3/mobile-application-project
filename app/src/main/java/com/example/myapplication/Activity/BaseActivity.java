@@ -1,18 +1,12 @@
-package com.example.myapplication;
+package com.example.myapplication.Activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Locale;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";

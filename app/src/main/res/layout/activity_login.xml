@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#37286E"
-    tools:context=".LoginActivity"
+    tools:context=".Activity.LoginActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -44,6 +44,13 @@
                 android:layout_marginEnd="16dp"
                 android:text="@string/language"/>
 
+            <ProgressBar
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/white"
+                android:visibility="invisible"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -56,6 +63,11 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
+        <WebView
+            android:id="@+id/wv_webView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
         <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"

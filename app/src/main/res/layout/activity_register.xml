@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#37286E"
     android:orientation="vertical"
-    tools:context=".RegisterActivity">
+    tools:context=".Activity.RegisterActivity">
 
 
     <LinearLayout
@@ -43,7 +43,16 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/language"/>
+                android:text="@string/language" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/white"
+                android:visibility="invisible"/>
         </RelativeLayout>
     </LinearLayout>
 

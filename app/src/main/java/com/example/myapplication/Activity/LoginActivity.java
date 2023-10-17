@@ -1,16 +1,13 @@
-package com.example.myapplication;
+package com.example.myapplication.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.example.myapplication.R;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "Login Activity";
@@ -46,8 +43,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // Return main activity
-                 openMainActivity();
-                // LoginActivity.super.onBackPressed();
+                // openMainActivity();
+                LoginActivity.super.onBackPressed();
             }
         });
         btn_signIn.setOnClickListener(new View.OnClickListener() {

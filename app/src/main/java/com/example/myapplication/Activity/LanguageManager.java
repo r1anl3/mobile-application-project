@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Activity;
 
 import android.content.Context;
 import android.content.res.Configuration;
