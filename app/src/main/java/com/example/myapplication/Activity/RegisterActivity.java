@@ -2,6 +2,7 @@ package com.example.myapplication.Activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.example.myapplication.R;
 
@@ -23,6 +26,10 @@ public class RegisterActivity extends BaseActivity {
     private EditText et_password;
     private EditText et_rePassword;
     private ProgressBar pg_loading;
+    private String username;
+    private String email;
+    private String password;
+    private String rePassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,11 @@ public class RegisterActivity extends BaseActivity {
         btn_back = findViewById(R.id.btn_back);
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
+        et_username = findViewById(R.id.et_username); // Get username Edit Text
+        et_email = findViewById(R.id.et_mail); // Get email Edit Text
+        et_password = findViewById(R.id.et_password); // Get password Edit Text
+        et_rePassword = findViewById(R.id.et_rePassword); //Get rePassword Edit Text
+
 
         // Set functions for components
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +89,15 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean validateForm() {
         //TODO: Validate user information
-        et_username = findViewById(R.id.et_username); // Get username Edit Text
-        et_email = findViewById(R.id.et_mail); // Get email Edit Text
-        et_password = findViewById(R.id.et_password); // Get password Edit Text
-        et_rePassword = findViewById(R.id.et_rePassword); //Get rePassword Edit Text
+        username = et_username.getText().toString(); // Extract username
+        email = et_email.getText().toString(); // Extract email
+        password = et_password.getText().toString(); // Extract password
+        rePassword = et_rePassword.getText().toString(); // Extract rePassword
 
-        String username = et_username.getText().toString(); // Extract username
-        String email = et_email.getText().toString(); // Extract email
-        String password = et_password.getText().toString(); // Extract password
-        String rePassword = et_rePassword.getText().toString(); // Extract rePassword
+//        Log.d("something", String.format("username: %s",username));
+//        Log.d("something", String.format("email: %s",email));
+//        Log.d("something", String.format("password: %s",password));
+//        Log.d("something", String.format("repassword: %s",rePassword));
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty()) { // If one field is empty
             mToast = Toast.makeText(this, R.string.form_warning, Toast.LENGTH_SHORT); // Warning user
@@ -98,7 +110,6 @@ public class RegisterActivity extends BaseActivity {
             return false; // User information is not valid
         }
 
-        mToast.cancel();
         return true; // User information is valid
     }
 
@@ -109,11 +120,10 @@ public class RegisterActivity extends BaseActivity {
             Do something here to be authorized by UIT
             Update isAuthorizedByUIT
         */
-        isAuthorizedByUIT = onAuthorize();
+        isAuthorizedByUIT = onAuthorizeByUIT();
 
         if (isAuthorizedByUIT) {
             openDashboardActivity(); // Go to dashboard
-            mToast.cancel();
         }
         else {
             // Pop up message show that "Can not sign up"
@@ -122,19 +132,33 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    private boolean onAuthorize() {
+    private boolean onAuthorizeByUIT() {
         //TODO: POST to get authorized by UIT
-        boolean isAuthorized = false;
-        WebView webView = findViewById(R.id.wv_webView);
+        String url = "https://uiot.ixxc.dev/auth/realms/master/protocol/openid-connect/token";
 
+        WebView webView = findViewById(R.id.wv_browser);
+        webView.setVisibility(View.VISIBLE);
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                if (url.contains("openid-connect/registrations")) {
+                    Log.d("something", "onPageFinish");
+                    String usrScript = "document.getElementById(\"username\").value=" + username + ";";
+                    String emailScript = "document.getElementById(\"email\").value=" + email + ";";
+                    String pwdScript = "document.getElementById(\"password\").value=" + password + ";";
+                    String rePwdScript = "document.getElementById(\"password-confirm\").value=" + rePassword + ";";
 
+                    view.evaluateJavascript(usrScript, null);
+                    view.evaluateJavascript(emailScript, null);
+                    view.evaluateJavascript(pwdScript, null);
+                    view.evaluateJavascript(rePwdScript, null);
+                    view.evaluateJavascript("document.getElementById(\"kc-register-form\").submit();", null);
+                }
             }
         });
-
-        return isAuthorized;
+        webView.loadUrl(url);
+        return false;
     }
 
 }
