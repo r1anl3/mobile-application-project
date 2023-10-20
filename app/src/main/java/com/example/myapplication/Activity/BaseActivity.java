@@ -2,13 +2,17 @@ package com.example.myapplication.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myapplication.R;
 
 import java.util.Objects;
 
@@ -17,14 +21,13 @@ public class BaseActivity extends AppCompatActivity {
     public boolean isAuthorizedByUIT = false;
     public boolean isAuthorizedByGoogle = false;
 
-    //BASE CLASS FOR INHERITED FUNCTIONS
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     public void onLanguageChange() {
-        //TODO: change language
+        //TODO: Change language
         LanguageManager manager = new LanguageManager(this);
         String currLang = manager.checkResource(); // check current device language
 
@@ -40,31 +43,31 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void openMainActivity() {
-        //TODO: open main activity
+        //TODO: Open main activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 
     public void openRegisterActivity() {
-        //TODO: open register activity
+        //TODO: Open register activity
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivities(new Intent[]{intent});
     }
 
     public void openLogInActivity() {
-        //TODO: open login activity
+        //TODO: Open login activity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivities(new Intent[]{intent});
     }
 
     public void  openDashboardActivity() {
-        //TODO: open dashboard activity
+        //TODO: Open dashboard activity
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivities(new Intent[]{intent});
     }
     public void signInWithGoogle() {
+        //TODO: Authenticate by google
         /*
             Do something here to be authorized by Google
             Update isAuthorizedByGoogle
@@ -73,18 +76,17 @@ public class BaseActivity extends AppCompatActivity {
 
         if (isAuthorizedByGoogle) {
             openDashboardActivity();
+            finish();
         }
         else {
             // Pop up message show that "Can not sign in"
+            Toast mToast = Toast.makeText(this, R.string.signup_warning, Toast.LENGTH_SHORT); // Warning user
+            mToast.show();
         }
     }
 
-    boolean isEmpty(EditText text) {
-        CharSequence str = text.getText().toString();
-        return TextUtils.isEmpty(str);
-    }
-
     boolean isEmail(EditText text) {
+        //TODO: Check email format
         CharSequence email = text.getText().toString();
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
