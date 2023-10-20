@@ -1,8 +1,9 @@
 package com.example.myapplication.Activity;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -10,21 +11,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.R;
 
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "Login Activity";
     private Button btn_signIn;
     private Button btn_back;
     private ImageButton btn_changeLanguage;
     private TextView tv_register;
     private ImageButton iBtn_google;
-    private ProgressBar pb_loading;
+    private LoadingAlert loadingAlert;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Lock orientation
 
         InitialView();
         InitialEvent();
@@ -37,7 +40,7 @@ public class LoginActivity extends BaseActivity {
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
         tv_register = findViewById(R.id.tv_register);
         iBtn_google = findViewById(R.id.ib_google);
-        pb_loading = findViewById(R.id.pb_loading);
+        loadingAlert = new LoadingAlert(LoginActivity.this);
     }
 
     private void InitialEvent() {
@@ -50,21 +53,20 @@ public class LoginActivity extends BaseActivity {
 
         btn_signIn.setOnClickListener(view -> {
             // Open sign in method
-            Log.d("something", "InitialEvent: sign in");
-            pb_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
 
             new Handler().postDelayed(() -> {
-                pb_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 onSignIn();
             },1000);
         });
 
         btn_changeLanguage.setOnClickListener(view -> {
             // Open change language method
-            pb_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
 
             new Handler().postDelayed(() -> {
-                pb_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 onLanguageChange();
             },300);
         });
@@ -76,10 +78,10 @@ public class LoginActivity extends BaseActivity {
 
         iBtn_google.setOnClickListener(view -> {
             // Open sign in with Google method
-            pb_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
 
             new Handler().postDelayed(() -> {
-                pb_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 signInWithGoogle();
             },1000);
         });

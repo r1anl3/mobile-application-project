@@ -1,14 +1,15 @@
 package com.example.myapplication.Activity;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.R;
 
 public class MainActivity extends BaseActivity {
@@ -20,12 +21,13 @@ public class MainActivity extends BaseActivity {
     private Button btn_signInWithGoogle;
     private Button btn_resetPassword;
     private ImageButton btn_changeLanguage;
-    private ProgressBar pg_loading;
+    private LoadingAlert loadingAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Lock orientation
 
         InitialView();
         InitialEven();
@@ -38,11 +40,12 @@ public class MainActivity extends BaseActivity {
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
         btn_signInWithGoogle = findViewById(R.id.btn_signIpWithGoogle);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
-        pg_loading = findViewById(R.id.pb_loading);
+        loadingAlert = new LoadingAlert(MainActivity.this);
     }
 
     private void InitialEven() {
         //TODO: Initial all events
+
         btn_signUp.setOnClickListener(view -> {
             // Open register activity
             openRegisterActivity();
@@ -55,11 +58,12 @@ public class MainActivity extends BaseActivity {
 
         btn_changeLanguage.setOnClickListener(view -> {
             // Open change language method
-            pg_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
+
             new Handler().postDelayed(() -> {
-                pg_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 onLanguageChange();
-            },300);
+            },1000);
         });
 
         btn_resetPassword.setOnClickListener(view -> {
@@ -69,10 +73,10 @@ public class MainActivity extends BaseActivity {
 
         btn_signInWithGoogle.setOnClickListener(view -> {
             // Open sign in with Google method
-            pg_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
 
             new Handler().postDelayed(() -> {
-                pg_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 signInWithGoogle();
             },1000);
         });

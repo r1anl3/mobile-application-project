@@ -1,6 +1,7 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,11 +12,11 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 import com.example.myapplication.GlobalVar;
+import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.R;
 
 public class RegisterActivity extends BaseActivity {
@@ -27,15 +28,16 @@ public class RegisterActivity extends BaseActivity {
     private Button btn_signUp;
     private ImageButton btn_changeLanguage;
     private WebView webView;
-    private ProgressBar pg_loading;
     private String username;
     private String email;
     private String password;
     private String rePassword;
+    private LoadingAlert loadingAlert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Lock orientation
 
         InitView();
         InitEvent();
@@ -51,7 +53,7 @@ public class RegisterActivity extends BaseActivity {
         et_password = findViewById(R.id.et_password); // Get password Edit Text
         et_rePassword = findViewById(R.id.et_rePassword); //Get rePassword Edit Text
         webView = findViewById(R.id.wv_browser);
-        pg_loading = findViewById(R.id.pb_loading);
+        loadingAlert = new LoadingAlert(RegisterActivity.this);
     }
 
     private void InitEvent() {
@@ -67,10 +69,10 @@ public class RegisterActivity extends BaseActivity {
             boolean isValidInformation = validateForm();
 
             if (isValidInformation) { // If information is valid
-                pg_loading.setVisibility(View.VISIBLE);
+                loadingAlert.startAlertDialog();
 
                 new Handler().postDelayed(() -> {
-                    pg_loading.setVisibility(View.INVISIBLE);
+                    loadingAlert.closeAlertDialog();
                     onSignUp();
                 }, 1000);
             }
@@ -78,10 +80,10 @@ public class RegisterActivity extends BaseActivity {
 
         btn_changeLanguage.setOnClickListener(view -> {
             // Open change language method
-            pg_loading.setVisibility(View.VISIBLE);
+            loadingAlert.startAlertDialog();
 
             new Handler().postDelayed(() -> {
-                pg_loading.setVisibility(View.INVISIBLE);
+                loadingAlert.closeAlertDialog();
                 onLanguageChange();
             },1000);
         });
