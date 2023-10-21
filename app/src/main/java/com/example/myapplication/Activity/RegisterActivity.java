@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -137,9 +138,8 @@ public class RegisterActivity extends BaseActivity {
             Do something here to be authorized by UIT
             Update isAuthorizedByUIT
         */
-        isAuthorizedByUIT = true;
-
-        if (isAuthorizedByUIT) {
+        getToken();
+        if (true) {
             openDashboardActivity(); // Go to dashboard
             finish();
         }
@@ -154,12 +154,12 @@ public class RegisterActivity extends BaseActivity {
     private void getToken() {
         //TODO: Get register token
 
-        webView.setVisibility(View.VISIBLE);
         webView.getSettings().setJavaScriptEnabled(true);
-
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                String redirect = "document.getElementsByTagName('a')[1].click();";
+                view.evaluateJavascript(redirect, null);
                 if (url.contains("login-actions/registration")) {
                     Log.d(GlobalVar.LOG_TAG, "onPageFinished: KO");
                     String usrScript = "document.getElementById('username').value='" + username + "';";
@@ -171,7 +171,7 @@ public class RegisterActivity extends BaseActivity {
                     view.evaluateJavascript(emailScript, null);
                     view.evaluateJavascript(pwdScript, null);
                     view.evaluateJavascript(rePwdScript, null);
-                    view.evaluateJavascript("document.getElementById('kc-register-form').submit();", null);
+                    view.evaluateJavascript("document.getElementById('kc-register-form')[0].submit();", null);
                 }
 
                 String cookies = CookieManager.getInstance().getCookie(url);
@@ -180,7 +180,7 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-        webView.loadUrl(GlobalVar.signUpUrl);
+        webView.loadUrl(GlobalVar.baseUrl);
     }
 
 }
