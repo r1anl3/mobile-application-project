@@ -22,4 +22,5 @@
     <string name="form_warning">Phần này không để trống!</string>
     <string name="email_invalid">Vui lòng nhập lại email!</string>
     <string name="password_error">Mật khẩu không khớp!</string>
+    <string name="username_or_email">Tên người dùng/Email</string>
 </resources>

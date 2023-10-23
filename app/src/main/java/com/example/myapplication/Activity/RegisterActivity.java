@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -71,11 +70,7 @@ public class RegisterActivity extends BaseActivity {
 
             if (isValidInformation) { // If information is valid
                 loadingAlert.startAlertDialog();
-
-                new Handler().postDelayed(() -> {
-                    loadingAlert.closeAlertDialog();
-                    onSignUp();
-                }, 1000);
+                onSignUp();
             }
         });
 
@@ -92,7 +87,7 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean validateForm() {
         //TODO: Validate user information
-        boolean isValid = true; // Total scores = 4
+        boolean isValid = true;
         username = et_username.getText().toString(); // Extract username
         email = et_email.getText().toString(); // Extract email
         password = et_password.getText().toString(); // Extract password
@@ -133,49 +128,51 @@ public class RegisterActivity extends BaseActivity {
 
 
     private void onSignUp() {
-        //TODO: Check sign up status, get access permission to dashboard
-        /*
-            Do something here to be authorized by UIT
-            Update isAuthorizedByUIT
-        */
+        //TODO: Get token from baseURL
         getToken();
-        if (true) {
-            openDashboardActivity(); // Go to dashboard
-            finish();
-        }
-        else {
-            // Pop up message show that "Can not sign up"
-            Toast mToast = Toast.makeText(this, R.string.signup_warning, Toast.LENGTH_SHORT); // Warning user
-            mToast.show();
-        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void getToken() {
         //TODO: Get register token
+        CookieManager.getInstance().removeAllCookies(null);
 
+//        webView.setVisibility(View.VISIBLE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                String redirect = "document.getElementsByTagName('a')[1].click();";
-                view.evaluateJavascript(redirect, null);
-                if (url.contains("login-actions/registration")) {
-                    Log.d(GlobalVar.LOG_TAG, "onPageFinished: KO");
-                    String usrScript = "document.getElementById('username').value='" + username + "';";
-                    String emailScript = "document.getElementById('email').value='" + email + "';";
-                    String pwdScript = "document.getElementById('password').value='" + password + "';";
-                    String rePwdScript = "document.getElementById('password-confirm').value='" + rePassword + "';";
 
-                    view.evaluateJavascript(usrScript, null);
-                    view.evaluateJavascript(emailScript, null);
-                    view.evaluateJavascript(pwdScript, null);
-                    view.evaluateJavascript(rePwdScript, null);
-                    view.evaluateJavascript("document.getElementById('kc-register-form')[0].submit();", null);
+                if (url.contains("openid-connect/auth")) { // Url is now in sign in page
+                    String redirect = "document.getElementsByTagName('a')[0].click();"; // Click on sign up button
+                    view.evaluateJavascript(redirect, null);
+                } else if (url.contains("login-actions/registration")) { // Url is now in sign up page
+                    Log.d(GlobalVar.LOG_TAG, "Enter registration");
+                    String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when email is exist
+                    String redText= "document.getElementsByClassName('red-text')[1].innerText;"; // Appear with data-error
+
+                    view.evaluateJavascript(dataError, dErr-> {
+                        Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
+                        if (!dErr.equals("null")) { // dErr = "Email already exist."
+                            signUpLog("2");
+                        } else { // This session run first
+                            String usrScript = "document.getElementById('username').value='" + username + "';";
+                            String emailScript = "document.getElementById('email').value='" + email + "';";
+                            String pwdScript = "document.getElementById('password').value='" + password + "';";
+                            String rePwdScript = "document.getElementById('password-confirm').value='" + rePassword + "';";
+
+                            view.evaluateJavascript(usrScript, null);
+                            view.evaluateJavascript(emailScript, null);
+                            view.evaluateJavascript(pwdScript, null);
+                            view.evaluateJavascript(rePwdScript, null);
+                            view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null); // Submit form
+                            loadingAlert.closeAlertDialog();
+                        }
+                    });
                 }
 
                 String cookies = CookieManager.getInstance().getCookie(url);
-                Log.d(GlobalVar.LOG_TAG, "this cookie: "+ cookies);
+                Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
                 super.onPageFinished(view,url);
             }
         });
@@ -183,4 +180,18 @@ public class RegisterActivity extends BaseActivity {
         webView.loadUrl(GlobalVar.baseUrl);
     }
 
+    private void signUpLog(String status) {
+        //TODO: Print sign up status on screen
+
+        String msg = "";
+        switch (status) {
+            case "1":
+                msg = "Success!";
+                break;
+            case "2":
+                msg = "Fail!";
+                break;
+        }
+        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
 }
