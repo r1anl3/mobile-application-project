@@ -12,7 +12,6 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ public class LoginActivity extends BaseActivity {
     private EditText et_user;
     private EditText et_password;
     private WebView webView;
-    private String user, password;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -44,7 +42,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void InitialView() {
-        //TODO: Initial all views
+        // Initial all views
         btn_signIn = findViewById(R.id.btn_signIn);
         btn_back = findViewById(R.id.btn_back);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
@@ -53,30 +51,30 @@ public class LoginActivity extends BaseActivity {
         loadingAlert = new LoadingAlert(LoginActivity.this);
         et_user = findViewById(R.id.et_user);
         et_password = findViewById(R.id.et_password);
-        webView = findViewById(R.id.wv_browser);
+//        webView = findViewById(R.id.wv_browser);
     }
 
     private void InitialEvent() {
-        //TODO: Initial all evens
-        btn_back.setOnClickListener(view -> {
+        // Initial all even
+        btn_back.setOnClickListener(view -> { // Back button
             // Open main activity
             openMainActivity();
             finish();
         });
 
-        btn_signIn.setOnClickListener(view -> {
+        btn_signIn.setOnClickListener(view -> { // Sign in button
             // Open sign in method
-            user = String.valueOf(et_user.getText());
-            password = String.valueOf(et_password.getText());
+            String user = String.valueOf(et_user.getText());
+            String password = String.valueOf(et_password.getText());
             boolean isValidInformation = validateForm(user, password);
 
             if (isValidInformation) {
                 loadingAlert.startAlertDialog();
-                onSignIn();
+                getToken(user, password);
             }
         });
 
-        btn_changeLanguage.setOnClickListener(view -> {
+        btn_changeLanguage.setOnClickListener(view -> { // Change language button
             // Open change language method
             loadingAlert.startAlertDialog();
 
@@ -86,12 +84,13 @@ public class LoginActivity extends BaseActivity {
             },300);
         });
 
-        tv_register.setOnClickListener(view -> {
+        tv_register.setOnClickListener(view -> { // Register text view
             // Open register activity
             openRegisterActivity();
+            finish();
         });
 
-        iBtn_google.setOnClickListener(view -> {
+        iBtn_google.setOnClickListener(view -> { // Sign in with google button
             // Open sign in with Google method
             loadingAlert.startAlertDialog();
 
@@ -102,13 +101,8 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void onSignIn() {
-        //TODO: Use token to sign in
-        getToken(user, password);
-    }
-
     private boolean validateForm(String username, String password) {
-        //TODO: Validate user information
+        // Validate user input
         boolean isValid = true;
 
         // Validate username
@@ -127,53 +121,44 @@ public class LoginActivity extends BaseActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void getToken(String user, String password) {
-        CookieManager.getInstance().removeAllCookies(null);
+        // Get login token
+        CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
-        webView.setVisibility(View.VISIBLE);
-        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.setVisibility(View.VISIBLE);
+        webView = new WebView(LoginActivity.this); // Create new web view
+        webView.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when error
-                String redText= "document.getElementsByClassName('red-text')[1].innerText;"; // Appear with data-error
 
                 view.evaluateJavascript(dataError, err -> {
                     Log.d(GlobalVar.LOG_TAG, "error: " + err);
-                    if (!err.equals("null")) {
-                        signInLog("2");
+                    if (!err.equals("null")) { // If error
+                        signInLog(err); // Log error
                     }
                     else {
+                        // Fill up sign in form
                         String usrScript = "document.getElementById('username').value='" + user + "';";
                         String pwdScript = "document.getElementById('password').value='" + password + "';";
                         view.evaluateJavascript(usrScript, null);
                         view.evaluateJavascript(pwdScript, null);
                         view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null);
-                        loadingAlert.closeAlertDialog();
+                        loadingAlert.closeAlertDialog(); // Close loading
                     }
                 });
 
-                String cookies = CookieManager.getInstance().getCookie(url);
+                String cookies = CookieManager.getInstance().getCookie(url); // Log cookies
                 Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
                 super.onPageFinished(view, url);
             }
         });
 
-        webView.loadUrl(GlobalVar.baseUrl);
-        loadingAlert.closeAlertDialog();
-//        openDashboardActivity();
+        webView.loadUrl(GlobalVar.baseUrl); // Loading url
     }
 
     private void signInLog(String s) {
-        String msg = "";
-        switch (s) {
-            case "1":
-                msg = "Success!";
-                break;
-            case "2":
-                msg = "Fail!";
-                break;
-        }
-        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
 }

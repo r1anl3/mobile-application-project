@@ -1,5 +1,6 @@
 package com.example.myapplication.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends BaseActivity {
     private ImageButton btn_changeLanguage;
     private LoadingAlert loadingAlert;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +32,11 @@ public class MainActivity extends BaseActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Lock orientation
 
         InitialView();
-        InitialEven();
+        InitialEvent();
     }
 
     private void InitialView() {
-        //TODO: Initial all views
+        // Initial all views
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_signIn = findViewById(R.id.btn_signIn);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
@@ -43,9 +45,8 @@ public class MainActivity extends BaseActivity {
         loadingAlert = new LoadingAlert(MainActivity.this);
     }
 
-    private void InitialEven() {
-        //TODO: Initial all events
-
+    private void InitialEvent() {
+        // Initial all events
         btn_signUp.setOnClickListener(view -> {
             // Open register activity
             openRegisterActivity();
@@ -83,13 +84,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onPasswordReset() {
-        //TODO: Reset password
         Log.d(TAG, "onPasswordReset: ");
     }
 
     @Override
     public void onBackPressed() {
-        //TODO: Double click to exit app
         long delayTime = 2000;
         if (backPressedTime + delayTime > System.currentTimeMillis()) { // backPressedTime = delayTime
             mToast.cancel(); // Cancel toast after exit

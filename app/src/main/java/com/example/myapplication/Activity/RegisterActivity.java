@@ -28,11 +28,8 @@ public class RegisterActivity extends BaseActivity {
     private Button btn_signUp;
     private ImageButton btn_changeLanguage;
     private WebView webView;
-    private String username;
-    private String email;
-    private String password;
-    private String rePassword;
     private LoadingAlert loadingAlert;
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +41,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void InitView() {
-        //TODO: Initial all views
+        // Initial all views
         btn_back = findViewById(R.id.btn_back);
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
@@ -52,29 +49,33 @@ public class RegisterActivity extends BaseActivity {
         et_email = findViewById(R.id.et_mail); // Get email Edit Text
         et_password = findViewById(R.id.et_password); // Get password Edit Text
         et_rePassword = findViewById(R.id.et_rePassword); //Get rePassword Edit Text
-        webView = findViewById(R.id.wv_browser);
+//        webView = findViewById(R.id.wv_browser);
         loadingAlert = new LoadingAlert(RegisterActivity.this);
     }
 
     private void InitEvent() {
-        //TODO: Initial all events
-        btn_back.setOnClickListener(view -> {
+        // Initial all event
+        btn_back.setOnClickListener(view -> { // Back button
             // Open main activity
             openMainActivity();
             finish();
         });
 
-        btn_signUp.setOnClickListener(view -> {
+        btn_signUp.setOnClickListener(view -> { // Sign up button
             // Validate user form, open sign up method
-            boolean isValidInformation = validateForm();
+            String username = et_username.getText().toString(); // Extract username
+            String email = et_email.getText().toString(); // Extract email
+            String password = et_password.getText().toString(); // Extract password
+            String rePassword = et_rePassword.getText().toString(); // Extract rePassword
+            boolean isValidInformation = validateForm(username, email, password, rePassword);
 
             if (isValidInformation) { // If information is valid
                 loadingAlert.startAlertDialog();
-                onSignUp();
+                getToken(username, email, password, rePassword);
             }
         });
 
-        btn_changeLanguage.setOnClickListener(view -> {
+        btn_changeLanguage.setOnClickListener(view -> { // Change language button
             // Open change language method
             loadingAlert.startAlertDialog();
 
@@ -85,13 +86,9 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    private boolean validateForm() {
-        //TODO: Validate user information
+    private boolean validateForm(String username, String email, String password, String rePassword) {
+        // Validate user input
         boolean isValid = true;
-        username = et_username.getText().toString(); // Extract username
-        email = et_email.getText().toString(); // Extract email
-        password = et_password.getText().toString(); // Extract password
-        rePassword = et_rePassword.getText().toString(); // Extract rePassword
 
         // Validate username
         if (username.isEmpty()) {
@@ -126,36 +123,33 @@ public class RegisterActivity extends BaseActivity {
         return isValid; // User information is valid
     }
 
-
-    private void onSignUp() {
-        //TODO: Get token from baseURL
-        getToken();
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
-    private void getToken() {
-        //TODO: Get register token
+    private void getToken(String username, String email, String password, String rePassword) {
+        // Get sign up token
         CookieManager.getInstance().removeAllCookies(null);
 
 //        webView.setVisibility(View.VISIBLE);
+        webView = new WebView(getBaseContext());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                Log.d(GlobalVar.LOG_TAG, "onPageFinished: ");
 
                 if (url.contains("openid-connect/auth")) { // Url is now in sign in page
                     String redirect = "document.getElementsByTagName('a')[0].click();"; // Click on sign up button
                     view.evaluateJavascript(redirect, null);
-                } else if (url.contains("login-actions/registration")) { // Url is now in sign up page
+                }
+                else if (url.contains("login-actions/registration")) { // Url is now in sign up page
                     Log.d(GlobalVar.LOG_TAG, "Enter registration");
                     String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when email is exist
-                    String redText= "document.getElementsByClassName('red-text')[1].innerText;"; // Appear with data-error
 
                     view.evaluateJavascript(dataError, dErr-> {
                         Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
                         if (!dErr.equals("null")) { // dErr = "Email already exist."
-                            signUpLog("2");
-                        } else { // This session run first
+                            signUpLog(dErr);
+                        }
+                        else { // This session run first
                             String usrScript = "document.getElementById('username').value='" + username + "';";
                             String emailScript = "document.getElementById('email').value='" + email + "';";
                             String pwdScript = "document.getElementById('password').value='" + password + "';";
@@ -180,18 +174,7 @@ public class RegisterActivity extends BaseActivity {
         webView.loadUrl(GlobalVar.baseUrl);
     }
 
-    private void signUpLog(String status) {
-        //TODO: Print sign up status on screen
-
-        String msg = "";
-        switch (status) {
-            case "1":
-                msg = "Success!";
-                break;
-            case "2":
-                msg = "Fail!";
-                break;
-        }
+    private void signUpLog(String msg) {
         Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 }

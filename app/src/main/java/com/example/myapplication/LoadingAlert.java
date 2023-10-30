@@ -12,7 +12,6 @@ public class LoadingAlert {
     }
 
     public void startAlertDialog() {
-        //TODO: Start alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -24,7 +23,6 @@ public class LoadingAlert {
     }
 
     public void closeAlertDialog() {
-        //TODO: End alert dialog
         dialog.dismiss();
     }
 }
