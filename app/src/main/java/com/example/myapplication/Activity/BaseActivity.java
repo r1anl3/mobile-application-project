@@ -27,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void onLanguageChange() {
-        //TODO: Change language
+        // Change language
         LanguageManager manager = new LanguageManager(this);
         String currLang = manager.checkResource(); // check current device language
 
@@ -43,31 +43,38 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void openMainActivity() {
-        //TODO: Open main activity
+        // Open main activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     public void openRegisterActivity() {
-        //TODO: Open register activity
+        // Open register activity
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivities(new Intent[]{intent});
     }
 
     public void openLogInActivity() {
-        //TODO: Open login activity
+        // Open login activity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivities(new Intent[]{intent});
     }
 
-    public void  openDashboardActivity() {
-        //TODO: Open dashboard activity
+    public void openDashboardActivity() {
+        // Open dashboard activity
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivities(new Intent[]{intent});
     }
+
+    public void openChangePasswordActivity() {
+        // Open Change password activity
+        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        startActivities(new Intent[]{intent});
+    }
+
     public void signInWithGoogle() {
-        //TODO: Authenticate by google
+        // Authenticate by google
         /*
             Do something here to be authorized by Google
             Update isAuthorizedByGoogle
@@ -86,7 +93,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     boolean isEmail(EditText text) {
-        //TODO: Check email format
+        // Check email format
         CharSequence email = text.getText().toString();
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }

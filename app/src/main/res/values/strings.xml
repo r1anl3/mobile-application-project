@@ -29,4 +29,7 @@
     <string name="loading" translatable="false">Loading...</string>
     <string name="username_or_email">Username or email</string>
     <string name="success_warning">Success!</string>
+    <string name="new_password">New password</string>
+    <string name="change">Save</string>
+    <string name="old_password">Old password</string>
 </resources>

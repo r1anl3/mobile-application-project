@@ -2,6 +2,7 @@ package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -84,7 +85,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onPasswordReset() {
-        Log.d(TAG, "onPasswordReset: ");
+        openChangePasswordActivity();
+        finish();
     }
 
     @Override
