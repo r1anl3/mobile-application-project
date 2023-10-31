@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity {
         btn_signInWithGoogle = findViewById(R.id.btn_signIpWithGoogle);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
         loadingAlert = new LoadingAlert(MainActivity.this);
+        setLangIcon();
     }
 
     private void InitialEvent() {

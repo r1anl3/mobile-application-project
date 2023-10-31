@@ -2,16 +2,16 @@ package com.example.myapplication.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.LanguageManager;
 import com.example.myapplication.R;
 
 import java.util.Objects;
@@ -20,6 +20,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";
     public boolean isAuthorizedByUIT = false;
     public boolean isAuthorizedByGoogle = false;
+    public String currLang;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,19 +28,31 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void onLanguageChange() {
-        // Change language
+        // TODO: Change language
         LanguageManager manager = new LanguageManager(this);
         String currLang = manager.checkResource(); // check current device language
+        ImageButton button = findViewById(R.id.btn_changeLanguage);
 
         if (Objects.equals(currLang, "en")) {
             // if language is English, change to Vietnamese
             manager.updateResource("vi");
+            setLangIcon();
         }
-        else {
+        else if (Objects.equals(currLang, "vi")){
             // if language is Vietnamese, change to English
             manager.updateResource("en");
+            setLangIcon();
         }
         recreate(); // recreate the build
+    }
+
+    public void setLangIcon() {
+        // TODO: Synchronize with app current language
+        LanguageManager manager = new LanguageManager(this);
+        String currLang = manager.checkResource(); // check current device language
+        ImageButton button = findViewById(R.id.btn_changeLanguage);
+
+        manager.updateIcon(currLang, button);
     }
 
     public void openMainActivity() {
