@@ -164,10 +164,10 @@ public class RegisterActivity extends BaseActivity {
                         }
                     });
                 }
-                else if (url.contains("manager/#state=")) { // Sign up success, open dashboard
+                else if (url.contains("manager/#state=")) { // Sign up success, open log in
                     Log.d(GlobalVar.LOG_TAG, getString(R.string.success_warning));
                     signUpLog(getString(R.string.success_warning));
-                    openDashboardActivity();
+                    openLogInActivity(); // Open login
                     finish();
                 }
 
