@@ -145,11 +145,7 @@ public class RegisterActivity extends BaseActivity {
                     String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when email is exist
 
                     view.evaluateJavascript(dataError, dErr-> {
-                        Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
-                        if (!dErr.equals("null")) { // dErr = "Email already exist."
-                            signUpLog(dErr);
-                        }
-                        else { // This session run first
+                        if (dErr.equals("null")) { // dErr = "Email already exist."
                             String usrScript = "document.getElementById('username').value='" + username + "';";
                             String emailScript = "document.getElementById('email').value='" + email + "';";
                             String pwdScript = "document.getElementById('password').value='" + password + "';";
@@ -162,11 +158,22 @@ public class RegisterActivity extends BaseActivity {
                             view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null); // Submit form
                             loadingAlert.closeAlertDialog();
                         }
+                        else { //
+                            Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
+                            signUpLog(dErr);
+                        }
                     });
+                }
+                else if (url.contains("manager/#state=")) { // Sign up success, open dashboard
+                    Log.d(GlobalVar.LOG_TAG, getString(R.string.success_warning));
+                    signUpLog(getString(R.string.success_warning));
+                    openDashboardActivity();
+                    finish();
                 }
 
                 String cookies = CookieManager.getInstance().getCookie(url);
                 Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
+                Log.d(GlobalVar.LOG_TAG, "url: " + url);
                 super.onPageFinished(view,url);
             }
         });

@@ -130,26 +130,36 @@ public class LoginActivity extends BaseActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                Log.d(GlobalVar.LOG_TAG, "onPageFinished: ");
                 String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when error
 
                 view.evaluateJavascript(dataError, err -> {
-                    Log.d(GlobalVar.LOG_TAG, "error: " + err);
-                    if (!err.equals("null")) { // If error
-                        signInLog(err); // Log error
-                    }
-                    else {
+                    if (err.equals("null")) { // If error
                         // Fill up sign in form
                         String usrScript = "document.getElementById('username').value='" + user + "';";
                         String pwdScript = "document.getElementById('password').value='" + password + "';";
+
                         view.evaluateJavascript(usrScript, null);
                         view.evaluateJavascript(pwdScript, null);
                         view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null);
                         loadingAlert.closeAlertDialog(); // Close loading
                     }
+                    else {
+                        Log.d(GlobalVar.LOG_TAG, "err: " + err);
+                        signInLog(err); // Log error
+                    }
                 });
+
+                if (url.contains("manager/#state=")) { // Login success, open dashboard
+                    signInLog(getString(R.string.success_warning));
+                    Log.d(GlobalVar.LOG_TAG, "success");
+                    openDashboardActivity();
+                    finish();
+                }
 
                 String cookies = CookieManager.getInstance().getCookie(url); // Log cookies
                 Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
+                Log.d(GlobalVar.LOG_TAG, "url : " + url);
                 super.onPageFinished(view, url);
             }
         });
