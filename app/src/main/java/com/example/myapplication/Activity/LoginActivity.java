@@ -1,7 +1,10 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -67,11 +70,17 @@ public class LoginActivity extends BaseActivity {
             // Open sign in method
             String user = String.valueOf(et_user.getText());
             String password = String.valueOf(et_password.getText());
-            boolean isValidInformation = validateForm(user, password);
 
-            if (isValidInformation) {
-                loadingAlert.startAlertDialog();
-                getToken(user, password);
+            boolean isNetworkConnected = isNetworkAvailable();
+            if (isNetworkConnected) {
+                boolean isValidInformation = validateForm(user, password);
+                if (isValidInformation) {
+                    loadingAlert.startAlertDialog();
+                    getToken(user, password);
+                }
+            }
+            else {
+                signInLog("No internet");
             }
         });
 
@@ -100,6 +109,13 @@ public class LoginActivity extends BaseActivity {
                 signInWithGoogle();
             },1000);
         });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private boolean validateForm(String username, String password) {
