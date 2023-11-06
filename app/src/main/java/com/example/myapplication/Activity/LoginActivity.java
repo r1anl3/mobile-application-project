@@ -43,6 +43,7 @@ public class LoginActivity extends BaseActivity {
 
     private void InitialView() {
         // Initial all views
+        setLangIcon();
         btn_signIn = findViewById(R.id.btn_signIn);
         btn_back = findViewById(R.id.btn_back);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
@@ -142,15 +143,16 @@ public class LoginActivity extends BaseActivity {
                         view.evaluateJavascript(usrScript, null);
                         view.evaluateJavascript(pwdScript, null);
                         view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null);
-                        loadingAlert.closeAlertDialog(); // Close loading
                     }
                     else {
+                        loadingAlert.closeAlertDialog(); // Close loading
                         Log.d(GlobalVar.LOG_TAG, "err: " + err);
                         signInLog(err); // Log error
                     }
                 });
 
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
+                    loadingAlert.closeAlertDialog(); // Close loading
                     signInLog(getString(R.string.success_warning));
                     Log.d(GlobalVar.LOG_TAG, "success");
                     openDashboardActivity();

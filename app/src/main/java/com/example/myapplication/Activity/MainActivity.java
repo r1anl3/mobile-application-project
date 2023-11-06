@@ -38,13 +38,13 @@ public class MainActivity extends BaseActivity {
 
     private void InitialView() {
         // Initial all views
+        setLangIcon();
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_signIn = findViewById(R.id.btn_signIn);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
         btn_signInWithGoogle = findViewById(R.id.btn_signIpWithGoogle);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
         loadingAlert = new LoadingAlert(MainActivity.this);
-        setLangIcon();
     }
 
     private void InitialEvent() {

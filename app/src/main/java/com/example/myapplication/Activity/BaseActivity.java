@@ -3,6 +3,7 @@ package com.example.myapplication.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,9 +19,8 @@ import java.util.Objects;
 
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";
-    public boolean isAuthorizedByUIT = false;
     public boolean isAuthorizedByGoogle = false;
-    public String currLang;
+    public String currLang = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,17 +29,18 @@ public class BaseActivity extends AppCompatActivity {
 
     public void onLanguageChange() {
         // TODO: Change language
-        LanguageManager manager = new LanguageManager(this);
-        String currLang = manager.checkResource(); // check current device language
+        LanguageManager manager = new LanguageManager(BaseActivity.this);
         ImageButton button = findViewById(R.id.btn_changeLanguage);
 
         if (Objects.equals(currLang, "en")) {
             // if language is English, change to Vietnamese
+            currLang = "vi";
             manager.updateResource("vi");
             setLangIcon();
         }
         else if (Objects.equals(currLang, "vi")){
             // if language is Vietnamese, change to English
+            currLang = "en";
             manager.updateResource("en");
             setLangIcon();
         }
@@ -49,10 +50,15 @@ public class BaseActivity extends AppCompatActivity {
     public void setLangIcon() {
         // TODO: Synchronize with app current language
         LanguageManager manager = new LanguageManager(this);
-        String currLang = manager.checkResource(); // check current device language
         ImageButton button = findViewById(R.id.btn_changeLanguage);
 
+        if (Objects.equals(currLang, "")) {
+            Log.d(TAG, "setLangIcon: empty");
+            currLang = manager.checkResource();
+        }
+
         manager.updateIcon(currLang, button);
+        Log.d(TAG, "setLangIcon: " + currLang);
     }
 
     public void openMainActivity() {

@@ -42,6 +42,7 @@ public class RegisterActivity extends BaseActivity {
 
     private void InitView() {
         // Initial all views
+        setLangIcon();
         btn_back = findViewById(R.id.btn_back);
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
@@ -129,7 +130,7 @@ public class RegisterActivity extends BaseActivity {
         CookieManager.getInstance().removeAllCookies(null);
 
 //        webView.setVisibility(View.VISIBLE);
-        webView = new WebView(getBaseContext());
+        webView = new WebView(RegisterActivity.this);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -143,28 +144,39 @@ public class RegisterActivity extends BaseActivity {
                 else if (url.contains("login-actions/registration")) { // Url is now in sign up page
                     Log.d(GlobalVar.LOG_TAG, "Enter registration");
                     String dataError = "document.getElementsByClassName('helper-text')[0].getAttribute('data-error');"; // Appear when email is exist
+                    String redText = "document.getElementsByClassName('red-text')[1].textContent;"; // Appear when username already exist.
 
                     view.evaluateJavascript(dataError, dErr-> {
-                        if (dErr.equals("null")) { // dErr = "Email already exist."
-                            String usrScript = "document.getElementById('username').value='" + username + "';";
-                            String emailScript = "document.getElementById('email').value='" + email + "';";
-                            String pwdScript = "document.getElementById('password').value='" + password + "';";
-                            String rePwdScript = "document.getElementById('password-confirm').value='" + rePassword + "';";
+                        if (dErr.equals("null")) { // No error in form
+                            view.evaluateJavascript(redText, red -> {
+                                if (red.equals("null")) {
+                                    String usrScript = "document.getElementById('username').value='" + username + "';";
+                                    String emailScript = "document.getElementById('email').value='" + email + "';";
+                                    String pwdScript = "document.getElementById('password').value='" + password + "';";
+                                    String rePwdScript = "document.getElementById('password-confirm').value='" + rePassword + "';";
 
-                            view.evaluateJavascript(usrScript, null);
-                            view.evaluateJavascript(emailScript, null);
-                            view.evaluateJavascript(pwdScript, null);
-                            view.evaluateJavascript(rePwdScript, null);
-                            view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null); // Submit form
-                            loadingAlert.closeAlertDialog();
+                                    view.evaluateJavascript(usrScript, null);
+                                    view.evaluateJavascript(emailScript, null);
+                                    view.evaluateJavascript(pwdScript, null);
+                                    view.evaluateJavascript(rePwdScript, null);
+                                    view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null); // Submit form
+                                }
+                                else {
+                                    loadingAlert.closeAlertDialog();
+                                    Log.d(GlobalVar.LOG_TAG, "red: " + red);
+                                    signUpLog(red);
+                                }
+                            });
                         }
                         else { //
+                            loadingAlert.closeAlertDialog();
                             Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
                             signUpLog(dErr);
                         }
                     });
                 }
                 else if (url.contains("manager/#state=")) { // Sign up success, open log in
+                    loadingAlert.closeAlertDialog();
                     Log.d(GlobalVar.LOG_TAG, getString(R.string.success_warning));
                     signUpLog(getString(R.string.success_warning));
                     openLogInActivity(); // Open login
