@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#37286E"
-    tools:context=".LoginActivity"
+    tools:context=".Activity.LoginActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,7 +16,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/img_bgColor"
@@ -34,15 +34,21 @@
                 android:layout_centerHorizontal="true"
                 app:srcCompat="@drawable/logo2" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_changeLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/language"/>
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Change Language" />
+            <WebView
+                android:id="@+id/wv_browser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
     </LinearLayout>
@@ -57,7 +63,7 @@
         android:layout_weight="1">
 
         <EditText
-            android:id="@+id/et_email"
+            android:id="@+id/et_user"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="24dp"
@@ -66,7 +72,7 @@
             android:drawableStart="@drawable/email"
             android:drawablePadding="8dp"
             android:ems="10"
-            android:hint="@string/mail"
+            android:hint="@string/username_or_email"
             android:inputType="textEmailAddress"
             android:padding="16dp"
             android:textColor="#ffffff"

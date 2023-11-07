@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="#37286E"
     android:orientation="vertical"
-    tools:context=".RegisterActivity">
-
+    tools:context=".Activity.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +16,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/img_bgColor"
@@ -35,15 +34,22 @@
                 android:layout_centerHorizontal="true"
                 app:srcCompat="@drawable/logo1" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_changeLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/language"/>
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Change Language" />
+
+            <WebView
+                android:id="@+id/wv_browser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
         </RelativeLayout>
     </LinearLayout>
 
