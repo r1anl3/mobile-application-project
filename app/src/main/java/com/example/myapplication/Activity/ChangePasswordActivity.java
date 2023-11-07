@@ -28,6 +28,7 @@ public class ChangePasswordActivity extends BaseActivity {
     EditText et_newPassword;
     EditText et_confirmPassword;
     Button btn_change;
+    Button btn_reset;
     Button btn_back;
     WebView wv_browser;
     LoadingAlert loadingAlert;
@@ -36,7 +37,8 @@ public class ChangePasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+//        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_reset_password);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Lock orientation
         
         InitialView();
@@ -47,10 +49,11 @@ public class ChangePasswordActivity extends BaseActivity {
         // Initial all views
         btn_language = findViewById(R.id.btn_changeLanguage);
         et_user = findViewById(R.id.et_user);
-        et_oldPassword = findViewById(R.id.et_password);
-        et_newPassword = findViewById(R.id.et_newPassword);
-        et_confirmPassword = findViewById(R.id.et_newPasswordConfirmation);
-        btn_change = findViewById(R.id.btn_changePassword);
+//        et_oldPassword = findViewById(R.id.et_password);
+//        et_newPassword = findViewById(R.id.et_newPassword);
+//        et_confirmPassword = findViewById(R.id.et_newPasswordConfirmation);
+//        btn_change = findViewById(R.id.btn_changePassword);
+        btn_reset = findViewById(R.id.btn_resetPassword);
         btn_back = findViewById(R.id.btn_back);
         wv_browser = findViewById(R.id.wv_browser);
         loadingAlert = new LoadingAlert(ChangePasswordActivity.this);
@@ -70,14 +73,62 @@ public class ChangePasswordActivity extends BaseActivity {
             openMainActivity();
             finish();
         });
-        btn_change.setOnClickListener(view -> {
-            signIn();
+//        btn_change.setOnClickListener(view -> {
+//            signIn();
+//        });
+        btn_reset.setOnClickListener(view -> {
+            loadingAlert.startAlertDialog();
+            resetPws();
         });
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void resetPws() {
+        // TODO: reset password with email or username
+        String username = et_user.getText().toString();
+        if (username.isEmpty()) {
+            et_user.setError("Not null");
+            return;
+        }
+        CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
+
+//        wv_browser.setVisibility(View.VISIBLE);
+        wv_browser = new WebView(ChangePasswordActivity.this); // Create new web view
+        wv_browser.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
+        wv_browser.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.d(GlobalVar.LOG_TAG, "onPageFinished: ");
+                String greenText = "document.getElementsByClassName('green-text')[1].textContent;"; // Appear when username already exist.
+                if (url.contains(GlobalVar.signInUrl)) {
+                    view.evaluateJavascript(greenText, green -> {
+                        loadingAlert.closeAlertDialog();
+                        Log.d(GlobalVar.LOG_TAG, "green: " + green);
+                        changePassLog(green);
+                    });
+                }
+                else if (url.contains(GlobalVar.resetPwsUrl)) {
+                    String usrScript = "document.getElementById('username').value='" + username + "';";
+                    String formScript = "document.getElementsByTagName('form')[0].submit();";
+
+                    view.evaluateJavascript(usrScript, null);
+                    view.evaluateJavascript(formScript, null);
+                }
+
+                String cookies = CookieManager.getInstance().getCookie(url); // Log cookies
+                Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
+                Log.d(GlobalVar.LOG_TAG, "url: " + url);
+                super.onPageFinished(view, url);
+            }
+        });
+
+        wv_browser.loadUrl(GlobalVar.resetPwsUrl); // Loading reset password url
+        wv_browser.removeAllViews();
     }
 
 
     private void signIn() {
-        // TODO: sign in with username and password
+        // sign in with username and password
         String username = et_user.getText().toString();
         String oldPassword = et_oldPassword.getText().toString();
         String newPassword = et_newPassword.getText().toString();
@@ -162,7 +213,7 @@ public class ChangePasswordActivity extends BaseActivity {
             }
         });
 
-        wv_browser.loadUrl(GlobalVar.resetUrl); // Loading reset password url
+        wv_browser.loadUrl(GlobalVar.changePwsUrl); // Loading reset password url
         wv_browser.removeAllViews();
     }
 
