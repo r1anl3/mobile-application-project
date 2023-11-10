@@ -1,10 +1,7 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,16 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.API.ApiManager;
-import com.example.myapplication.API.ApiService;
-import com.example.myapplication.API.ApiClient;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
-import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn;
@@ -113,13 +103,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
     private boolean validateForm(String username, String password) {
         // Validate user input
         boolean isValid = true;
@@ -172,9 +155,8 @@ public class LoginActivity extends BaseActivity {
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
                     loadingAlert.closeAlertDialog(); // Close loading
                     signInLog(getString(R.string.success_warning));
-//                    String code = url.split("&code=")[1];
-//                    getTokenByInfo(user, password);
-//                    Log.d(GlobalVar.LOG_TAG, "success: " + code);
+                    String code = url.split("&code=")[1];
+                    Log.d(GlobalVar.LOG_TAG, "success: " + code);
                     openDashboardActivity();
                     finish();
                 }
@@ -190,9 +172,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getTokenByInfo(String user, String pass) {
-        ApiManager manager = new ApiManager();
-        manager.getToken(user, pass);
-        loadingAlert.closeAlertDialog();
+        new Thread(() -> {
+            ApiManager.getToken(user, pass);
+            loadingAlert.closeAlertDialog();
+        }).start();
     }
 
     private void signInLog(String s) {
