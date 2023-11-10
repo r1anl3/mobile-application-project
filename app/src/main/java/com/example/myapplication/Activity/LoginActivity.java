@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,9 +17,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.API.ApiManager;
+import com.example.myapplication.API.ApiService;
+import com.example.myapplication.API.ApiClient;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
+import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn;
@@ -71,16 +78,11 @@ public class LoginActivity extends BaseActivity {
             String user = String.valueOf(et_user.getText());
             String password = String.valueOf(et_password.getText());
 
-            boolean isNetworkConnected = isNetworkAvailable();
-            if (isNetworkConnected) {
-                boolean isValidInformation = validateForm(user, password);
-                if (isValidInformation) {
-                    loadingAlert.startAlertDialog();
-                    getToken(user, password);
-                }
-            }
-            else {
-                signInLog("No internet");
+            boolean isValidInformation = validateForm(user, password);
+            if (isValidInformation) {
+                loadingAlert.startAlertDialog();
+//                    getToken(user, password);
+                getTokenByInfo(user, password);
             }
         });
 
@@ -170,7 +172,9 @@ public class LoginActivity extends BaseActivity {
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
                     loadingAlert.closeAlertDialog(); // Close loading
                     signInLog(getString(R.string.success_warning));
-                    Log.d(GlobalVar.LOG_TAG, "success");
+//                    String code = url.split("&code=")[1];
+//                    getTokenByInfo(user, password);
+//                    Log.d(GlobalVar.LOG_TAG, "success: " + code);
                     openDashboardActivity();
                     finish();
                 }
@@ -183,6 +187,12 @@ public class LoginActivity extends BaseActivity {
         });
 
         webView.loadUrl(GlobalVar.baseUrl); // Loading url
+    }
+
+    private void getTokenByInfo(String user, String pass) {
+        ApiManager manager = new ApiManager();
+        manager.getToken(user, pass);
+        loadingAlert.closeAlertDialog();
     }
 
     private void signInLog(String s) {
