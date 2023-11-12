@@ -20,7 +20,7 @@ import java.util.Objects;
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";
     public boolean isAuthorizedByGoogle = false;
-    public String currLang = "";
+//    public String currLang = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,19 +28,17 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void onLanguageChange() {
-        // TODO: Change language
+        // Change language
         LanguageManager manager = new LanguageManager(BaseActivity.this);
-        ImageButton button = findViewById(R.id.btn_changeLanguage);
+        String currLang = manager.checkResource();
 
         if (Objects.equals(currLang, "en")) {
             // if language is English, change to Vietnamese
-            currLang = "vi";
             manager.updateResource("vi");
             setLangIcon();
         }
         else if (Objects.equals(currLang, "vi")){
             // if language is Vietnamese, change to English
-            currLang = "en";
             manager.updateResource("en");
             setLangIcon();
         }
@@ -48,17 +46,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setLangIcon() {
-        // TODO: Synchronize with app current language
+        // Synchronize with app current language
         LanguageManager manager = new LanguageManager(this);
         ImageButton button = findViewById(R.id.btn_changeLanguage);
-
-        if (Objects.equals(currLang, "")) {
-            Log.d(TAG, "setLangIcon: empty");
-            currLang = manager.checkResource();
-        }
-
-        manager.updateIcon(currLang, button);
-        Log.d(TAG, "setLangIcon: " + currLang);
+        String devLang = manager.checkResource();
+        manager.updateIcon(devLang, button);
+        Log.d(TAG, "setLangIcon: " + devLang);
     }
 
     public void openMainActivity() {

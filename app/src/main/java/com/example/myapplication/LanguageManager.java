@@ -12,10 +12,14 @@ import java.util.Locale;
 
 public class LanguageManager {
     private Context ct;
-    private Dictionary<String, Integer> langDic;
+    private final Dictionary<String, Integer> langDic;
+    private Resources resources;
+    private Configuration configuration;
 
     public LanguageManager(Context ctx) {
         this.ct = ctx;
+        resources = ct.getResources();
+        configuration = resources.getConfiguration();
         langDic = new Hashtable<>();
         langDic.put("vi", R.mipmap.icon_vn);
         langDic.put("en", R.mipmap.icon_eng);
@@ -23,16 +27,13 @@ public class LanguageManager {
 
     public String checkResource() {
         // Check current language
-        String langCode = Locale.getDefault().getLanguage();
-        return langCode;
+        return configuration.getLocales().toLanguageTags().split("-")[0];
     }
 
     public void updateResource(String code) {
         // Update language
         Locale locale = new Locale(code);
         Locale.setDefault(locale);
-        Resources resources = ct.getResources();
-        Configuration configuration = resources.getConfiguration();
         configuration.locale = locale;
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
