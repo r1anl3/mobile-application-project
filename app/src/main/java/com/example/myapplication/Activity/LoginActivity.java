@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity {
             if (isValidInformation) {
                 loadingAlert.startAlertDialog();
 //                    getToken(user, password);
-                getTokenByInfo(tokenUser, tokenPass);
+                getTokenByInfo();
             }
         });
 
@@ -175,10 +175,10 @@ public class LoginActivity extends BaseActivity {
         webView.loadUrl(GlobalVar.baseUrl); // Loading url
     }
 
-    private void getTokenByInfo(String user, String pass) {
+    private void getTokenByInfo() {
         // Get token by user information
         new Thread(() -> {
-            Token token = ApiManager.getToken(user, pass); // Get token
+            Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
             LocalDataManager.Init(LoginActivity.this); // Create local data manager
 
             LocalDataManager.setToken(token); // Save token to local
