@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
+import com.example.myapplication.Manager.LocalDataManager;
+import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
 public class LoginActivity extends BaseActivity {
@@ -172,8 +174,13 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getTokenByInfo(String user, String pass) {
+        // Get token by user information
         new Thread(() -> {
-            ApiManager.getToken(user, pass);
+            Token token = ApiManager.getToken(user, pass); // Get token
+            LocalDataManager.Init(LoginActivity.this); // Create local data manager
+
+            LocalDataManager.setToken(token); // Save token to local
+            Log.d(GlobalVar.LOG_TAG, "getTokenByInfo: " + LocalDataManager.getToken().access_token); // Get token access from local
             loadingAlert.closeAlertDialog();
         }).start();
     }
