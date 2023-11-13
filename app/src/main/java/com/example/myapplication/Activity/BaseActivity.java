@@ -20,7 +20,6 @@ import java.util.Objects;
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "Base Activity";
     public boolean isAuthorizedByGoogle = false;
-//    public String currLang = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,12 +34,10 @@ public class BaseActivity extends AppCompatActivity {
         if (Objects.equals(currLang, "en")) {
             // if language is English, change to Vietnamese
             manager.updateResource("vi");
-            setLangIcon();
         }
         else if (Objects.equals(currLang, "vi")){
             // if language is Vietnamese, change to English
             manager.updateResource("en");
-            setLangIcon();
         }
         recreate(); // recreate the build
     }
