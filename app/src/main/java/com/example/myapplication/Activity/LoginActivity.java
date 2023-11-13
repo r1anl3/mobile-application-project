@@ -31,6 +31,8 @@ public class LoginActivity extends BaseActivity {
     private EditText et_user;
     private EditText et_password;
     private WebView webView;
+    private static final String tokenUser = "user";
+    private static final String tokenPass = "123";
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -74,7 +76,7 @@ public class LoginActivity extends BaseActivity {
             if (isValidInformation) {
                 loadingAlert.startAlertDialog();
 //                    getToken(user, password);
-                getTokenByInfo(user, password);
+                getTokenByInfo(tokenUser, tokenPass);
             }
         });
 
