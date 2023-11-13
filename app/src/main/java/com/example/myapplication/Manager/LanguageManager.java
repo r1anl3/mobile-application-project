@@ -1,12 +1,13 @@
-package com.example.myapplication;
+package com.example.myapplication.Manager;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.widget.ImageButton;
 
+import com.example.myapplication.R;
+
 import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.LanguageManager;
+import com.example.myapplication.Manager.LanguageManager;
 import com.example.myapplication.R;
 
 import java.util.Objects;
