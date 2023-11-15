@@ -62,7 +62,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(Fragment fragment, int num) {
-        // Replace fragment
+        // TODO: Replace fragment, kill old fragment
         Log.d("something", "replaceFragment: " + num);
         FragmentTransaction transaction = fm.beginTransaction(); // Create Fragment transaction
         transaction.replace(R.id.main_frame, fragment); // Replace fragment
