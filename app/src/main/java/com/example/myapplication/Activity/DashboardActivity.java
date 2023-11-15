@@ -66,7 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
         Log.d("something", "replaceFragment: " + num);
         FragmentTransaction transaction = fm.beginTransaction(); // Create Fragment transaction
         transaction.replace(R.id.main_frame, fragment); // Replace fragment
-        transaction.addToBackStack(null); // No call backstack
+        transaction.addToBackStack(null); // Add transaction to backstack
         transaction.commit(); // Perform transaction
     }
 
