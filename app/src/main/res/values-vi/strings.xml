@@ -28,4 +28,11 @@
     <string name="change">Lưu</string>
     <string name="old_password">Mật khẩu hiện tại</string>
     <string name="reset">Đặt lại</string>
+    <string name="today">Hôm nay</string>
+    <string name="windSpeed">Tốc độ gió</string>
+    <string name="humidity">Độ ẩm</string>
+    <string name="rainfall">Khả năng mưa</string>
+    <string name="wind_direction">Hướng gió</string>
+    <string name="manufacture">Sản xuất</string>
+    <string name="location">Địa điểm</string>
 </resources>

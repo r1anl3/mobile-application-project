@@ -33,4 +33,17 @@
     <string name="change">Save</string>
     <string name="old_password">Old password</string>
     <string name="reset">Reset</string>
+    <string name="rainfall_sample" translatable="false">22%</string>
+    <string name="humidity_sample" translatable="false">66%</string>
+    <string name="today">Today</string>
+    <string name="windSpeed">Wind speed</string>
+    <string name="windSpeed_sample" translatable="false">4.3 Km/h</string>
+    <string name="humidity">Humidity</string>
+    <string name="rainfall">Rain fall</string>
+    <string name="wind_direction">Wind direction</string>
+    <string name="wind_dir_sample" translatable="false">80</string>
+    <string name="uiot" translatable="false">UIOT</string>
+    <string name="manufacture">Manufacture</string>
+    <string name="location">Location</string>
+    <string name="location_sample" translatable="false">Bien Hoa</string>
 </resources>
