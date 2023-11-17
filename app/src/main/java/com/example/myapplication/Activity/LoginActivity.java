@@ -176,7 +176,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getTokenByInfo() {
-        // Get token by user information
+        // TODO: Get token if no token in local or token expired
         new Thread(() -> {
             Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
             LocalDataManager.Init(LoginActivity.this); // Create local data manager
