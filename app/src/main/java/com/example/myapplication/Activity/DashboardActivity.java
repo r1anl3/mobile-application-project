@@ -9,10 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.myapplication.API.ApiClient;
+import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Fragment.DeviceFragment;
 import com.example.myapplication.Fragment.HomeFragment;
 import com.example.myapplication.Fragment.MapFragment;
 import com.example.myapplication.Fragment.UserFragment;
+import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Manager.LocalDataManager;
+import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -36,6 +41,7 @@ public class DashboardActivity extends AppCompatActivity {
 //        Fragment fragment = homeFrag;
     }
 
+
     private void InitialVars() {
         // Initial variables
         fm = getSupportFragmentManager(); // Create Fragment manager
@@ -55,10 +61,23 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void InitialEvents() {
         // Initial events
+        setApiToken(); // Set Api token from local to ApiClient
         ic_home.setOnClickListener(view -> replaceFragment(homeFrag, 0)); // Replace home fragment
         ic_dev.setOnClickListener(view -> replaceFragment(devFrag, 1)); // Replace device fragment
         ic_map.setOnClickListener(view -> replaceFragment(mapFrag, 2)); // Replace map fragment
         ic_user.setOnClickListener(view -> replaceFragment(userFrag, 3)); // Replace user fragment
+    }
+
+    private void setApiToken() {
+        // Set api token from local database
+        LocalDataManager.Init(DashboardActivity.this); // Create manager
+        Log.d(GlobalVar.LOG_TAG, "Token local: " + LocalDataManager
+                .getToken()
+                .access_token);  // Log token
+        ApiClient.token = LocalDataManager
+                .getToken()
+                .access_token; // Set token to ApiClient
+        Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
     }
 
     private void replaceFragment(Fragment fragment, int num) {
@@ -69,6 +88,5 @@ public class DashboardActivity extends AppCompatActivity {
         transaction.addToBackStack(null); // Add transaction to backstack
         transaction.commit(); // Perform transaction
     }
-
 
 }
