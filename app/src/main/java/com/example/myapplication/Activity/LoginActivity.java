@@ -1,14 +1,10 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,8 +14,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
+import com.example.myapplication.Manager.LocalDataManager;
+import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
 public class LoginActivity extends BaseActivity {
@@ -32,6 +31,8 @@ public class LoginActivity extends BaseActivity {
     private EditText et_user;
     private EditText et_password;
     private WebView webView;
+    private static final String tokenUser = "user";
+    private static final String tokenPass = "123";
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -71,16 +72,11 @@ public class LoginActivity extends BaseActivity {
             String user = String.valueOf(et_user.getText());
             String password = String.valueOf(et_password.getText());
 
-            boolean isNetworkConnected = isNetworkAvailable();
-            if (isNetworkConnected) {
-                boolean isValidInformation = validateForm(user, password);
-                if (isValidInformation) {
-                    loadingAlert.startAlertDialog();
-                    getToken(user, password);
-                }
-            }
-            else {
-                signInLog("No internet");
+            boolean isValidInformation = validateForm(user, password);
+            if (isValidInformation) {
+                loadingAlert.startAlertDialog();
+//                    getToken(user, password);
+                getTokenByInfo();
             }
         });
 
@@ -109,13 +105,6 @@ public class LoginActivity extends BaseActivity {
                 signInWithGoogle();
             },1000);
         });
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private boolean validateForm(String username, String password) {
@@ -170,7 +159,8 @@ public class LoginActivity extends BaseActivity {
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
                     loadingAlert.closeAlertDialog(); // Close loading
                     signInLog(getString(R.string.success_warning));
-                    Log.d(GlobalVar.LOG_TAG, "success");
+                    String code = url.split("&code=")[1];
+                    Log.d(GlobalVar.LOG_TAG, "success: " + code);
                     openDashboardActivity();
                     finish();
                 }
@@ -183,6 +173,18 @@ public class LoginActivity extends BaseActivity {
         });
 
         webView.loadUrl(GlobalVar.baseUrl); // Loading url
+    }
+
+    private void getTokenByInfo() {
+        // TODO: Get token if no token in local or token expired
+        new Thread(() -> {
+            Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
+            LocalDataManager.Init(LoginActivity.this); // Create local data manager
+
+            LocalDataManager.setToken(token); // Save token to local
+            Log.d(GlobalVar.LOG_TAG, "getTokenByInfo: " + LocalDataManager.getToken().access_token); // Get token access from local
+            loadingAlert.closeAlertDialog();
+        }).start();
     }
 
     private void signInLog(String s) {
