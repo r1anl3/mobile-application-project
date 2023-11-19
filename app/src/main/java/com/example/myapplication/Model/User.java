@@ -3,18 +3,17 @@ package com.example.myapplication.Model;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
-    public String realm;
-    public String realmId;
+    private String realm;
+    private String realmId;
+    private String id;
+    private String firstName;
+    private String lastName;
 
-    public String id;
-    public String firstName;
-    public String lastName;
-
-    public String email;
-    public boolean enabled;
-    public long createdOn;
-    public boolean serviceAccount;
-    public String username;
+    private String email;
+    private boolean enabled;
+    private long createdOn;
+    private boolean serviceAccount;
+    private String username;
     private static User me;
 
     public static User getMe() {
