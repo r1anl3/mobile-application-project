@@ -73,10 +73,10 @@ public class DashboardActivity extends AppCompatActivity {
         LocalDataManager.Init(DashboardActivity.this); // Create manager
         Log.d(GlobalVar.LOG_TAG, "Token local: " + LocalDataManager
                 .getToken()
-                .access_token);  // Log token
+                .getAccess_token());  // Log token
         ApiClient.token = LocalDataManager
                 .getToken()
-                .access_token; // Set token to ApiClient
+                .getAccess_token(); // Set token to ApiClient
         Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
     }
 
