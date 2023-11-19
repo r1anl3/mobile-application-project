@@ -35,15 +35,7 @@ public class HomeFragment extends Fragment {
     private TextView tv_windDir;
     private TextView tv_manufacture;
     private TextView tv_location;
-    Handler handler = new Handler(message -> {
-        Bundle bundle = message.getData(); // Get message
-        boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
-        if (!isOk) return false; // If not ok
-
-        setInfo(); // Set info
-
-        return false;
-    });
+    Handler handler;
     public HomeFragment() {
     }
 
@@ -64,6 +56,16 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         InitialViews(view);
         InitialEvents();
+
+        handler = new Handler(message -> { // Handle message
+            Bundle bundle = message.getData(); // Get message
+            boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+            if (!isOk) return false; // If not ok
+
+            setInfo(); // Set info
+
+            return false;
+        });
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -106,6 +108,6 @@ public class HomeFragment extends Fragment {
 
     private void setInfo() {
         // TODO: Set information about user, weather assets
-        tv_greed.setText("Hi " + User.getMe().username); // Set username
+        tv_greed.setText("Hi " + User.getMe().getUsername()); // Set username
     }
 }
