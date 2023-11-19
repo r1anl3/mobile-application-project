@@ -3,7 +3,6 @@ package com.example.myapplication.API;
 import android.util.Log;
 
 import com.example.myapplication.GlobalVar;
-import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
 
@@ -26,7 +25,8 @@ public class ApiManager {
             Response<Token> response = call.execute(); // Get response from server
             if (response.isSuccessful()) { // If success
                 Token token = response.body(); // Assign response to token
-                ApiClient.token = token.access_token; // Update Api client token
+                assert token != null;
+                ApiClient.token = token.getAccess_token(); // Update Api client token
                 Log.d(GlobalVar.LOG_TAG, "token: " + ApiClient.token); // Log Api client token
                 return token; // Return token
             }
