@@ -16,7 +16,7 @@
     <string name="language">VN</string>
     <string name="register">Đăng ký ngay</string>
     <string name="press_alert">Nhấp 2 lần để thoát!</string>
-    <string name="greed_user">"Chào, "</string>
+    <string name="greed_user">Chào,</string>
     <string name="password_warning">Mật khẩu không khớp!</string>
     <string name="signup_warning">Không thể đăng ký!</string>
     <string name="form_warning">Phần này không để trống!</string>
