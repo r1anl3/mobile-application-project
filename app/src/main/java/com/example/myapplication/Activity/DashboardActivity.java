@@ -10,14 +10,12 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.myapplication.API.ApiClient;
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Fragment.DeviceFragment;
 import com.example.myapplication.Fragment.HomeFragment;
 import com.example.myapplication.Fragment.MapFragment;
 import com.example.myapplication.Fragment.UserFragment;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
-import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
 public class DashboardActivity extends AppCompatActivity {
