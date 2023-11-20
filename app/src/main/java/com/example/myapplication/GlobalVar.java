@@ -11,4 +11,5 @@ public class GlobalVar {
     public static String clientId = "openremote";
     public static String grantType = "password";
     public static int DELAY_TIME = 100;
+    public static String ASSET_ID = "5zI6XqkQVSfdgOrZ1MyWEf";
 }
