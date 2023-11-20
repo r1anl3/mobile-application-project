@@ -18,12 +18,13 @@ import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.R;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends BaseActivity {
     private FragmentManager fm;
     private HomeFragment homeFrag;
     private DeviceFragment devFrag;
     private MapFragment mapFrag;
     private UserFragment userFrag;
+    private Fragment currFrag;
     private ImageView ic_home, ic_dev, ic_map, ic_user;
 
     @Override
@@ -36,7 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
         InitialEvents();
 
         fm.beginTransaction().add(R.id.main_frame, homeFrag, "home").commit(); // Add home fragment on create
-//        Fragment fragment = homeFrag;
+        currFrag = homeFrag;
     }
 
 
@@ -60,10 +61,10 @@ public class DashboardActivity extends AppCompatActivity {
     private void InitialEvents() {
         // Initial events
         setApiToken(); // Set Api token from local to ApiClient
-        ic_home.setOnClickListener(view -> replaceFragment(homeFrag, 0)); // Replace home fragment
-        ic_dev.setOnClickListener(view -> replaceFragment(devFrag, 1)); // Replace device fragment
-        ic_map.setOnClickListener(view -> replaceFragment(mapFrag, 2)); // Replace map fragment
-        ic_user.setOnClickListener(view -> replaceFragment(userFrag, 3)); // Replace user fragment
+        ic_home.setOnClickListener(view -> replaceFragment(homeFrag)); // Replace home fragment
+        ic_dev.setOnClickListener(view -> replaceFragment(devFrag)); // Replace device fragment
+        ic_map.setOnClickListener(view -> replaceFragment(mapFrag)); // Replace map fragment
+        ic_user.setOnClickListener(view -> replaceFragment(userFrag)); // Replace user fragment
     }
 
     private void setApiToken() {
@@ -78,13 +79,23 @@ public class DashboardActivity extends AppCompatActivity {
         Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
     }
 
-    private void replaceFragment(Fragment fragment, int num) {
-        //TODO: Replace fragment, kill old fragment
-        Log.d("something", "replaceFragment: " + num);
+    private void replaceFragment(Fragment fragment) {
+        // Replace fragment, kill old fragment
+        currFrag = fragment; // Update current fragment
         FragmentTransaction transaction = fm.beginTransaction(); // Create Fragment transaction
-        transaction.replace(R.id.main_frame, fragment); // Replace fragment
+        transaction.replace(R.id.main_frame, fragment, null); // Replace fragment
         transaction.addToBackStack(null); // Add transaction to backstack
         transaction.commit(); // Perform transaction
     }
 
+    @Override
+    public void onBackPressed() {
+        if (currFrag != homeFrag) { // If not home fragment
+            replaceFragment(homeFrag); // Replace home fragment
+        }
+        else { // In home fragment
+            openMainActivity(); // open main activity
+            finish(); // End Dashboard activity
+        }
+    }
 }
