@@ -33,7 +33,6 @@ public class LoginActivity extends BaseActivity {
     private LoadingAlert loadingAlert;
     private EditText et_user;
     private EditText et_password;
-    private WebView webView;
     Handler handler;
     private static final String tokenUser = "user";
     private static final String tokenPass = "123";
@@ -79,8 +78,20 @@ public class LoginActivity extends BaseActivity {
             boolean isValidInformation = validateForm(user, password);
             if (isValidInformation) {
                 loadingAlert.startAlertDialog();
-                    authenticateUser(user, password);
-//                getTokenByInfo();
+                authenticateUser(user, password);
+
+                handler = new Handler(message -> { // Handle message
+                    Bundle bundle = message.getData(); // Get message
+                    boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+                    if (!isOk) return false; // If not ok return
+
+                    loadingAlert.closeAlertDialog(); // Close loading
+                    signInLog(getString(R.string.success_warning)); // Print message to user
+                    openDashboardActivity(); // Open dashboard activity
+                    finish(); // Finish Login activity
+
+                    return false;
+                });
             }
         });
 
@@ -135,7 +146,7 @@ public class LoginActivity extends BaseActivity {
         CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
 //        webView.setVisibility(View.VISIBLE);
-        webView = new WebView(LoginActivity.this); // Create new web view
+        WebView webView = new WebView(LoginActivity.this); // Create new web view
         webView.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -161,28 +172,13 @@ public class LoginActivity extends BaseActivity {
                 });
 
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
-                    loadingAlert.closeAlertDialog(); // Close loading
                     String code = url.split("&code=")[1];
                     Log.d(GlobalVar.LOG_TAG, "success: " + code);
                     getTokenByInfo();
 
-                    handler = new Handler(message -> { // Handle message
-                        Bundle bundle = message.getData(); // Get message
-                        boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
-                        if (!isOk) return false; // If not ok return
-
-                        loadingAlert.closeAlertDialog(); // Close loading
-                        signInLog(getString(R.string.success_warning)); // Print message to user
-                        openDashboardActivity(); // Open dashboard activity
-                        finish(); // Finish Login activity
-
-                        return false;
-                    });
                 }
 
-                String cookies = CookieManager.getInstance().getCookie(url); // Log cookies
-                Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
-                Log.d(GlobalVar.LOG_TAG, "url : " + url);
+                Log.d(GlobalVar.LOG_TAG, "url : " + url);// Log url
                 super.onPageFinished(view, url);
             }
         });
