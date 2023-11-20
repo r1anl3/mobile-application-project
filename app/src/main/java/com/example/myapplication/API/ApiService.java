@@ -1,17 +1,15 @@
 package com.example.myapplication.API;
 
+import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
     @FormUrlEncoded
@@ -22,4 +20,8 @@ public interface ApiService {
                          @Field("password") String pws);
     @GET("api/master/user/user")
     Call<User> getUser();
+
+    @GET("api/master/asset/{assetID}")
+    Call<Asset> getAsset(@Path("assetID") String assetID);//, @Header("Authorization") String auth);
+
 }

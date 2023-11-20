@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Model.Asset;
-import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
 
