@@ -3,6 +3,8 @@ package com.example.myapplication.API;
 import android.util.Log;
 
 import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Model.Asset;
+import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
 
@@ -48,6 +50,25 @@ public class ApiManager {
                 Log.d(GlobalVar.LOG_TAG, "Username: " + User.getMe().getUsername()); // Log username
             }
             else { Log.d(GlobalVar.LOG_TAG, "getUser: Not Successful"); } // If fail
+        } catch (IOException e) {
+//            e.printStackTrace();
+            Log.d(GlobalVar.LOG_TAG, "exception: " + e.getMessage()); // Print exception
+        }
+    }
+
+    public static void getAsset() {
+        // Get user info
+        Call<Asset> call = service.getAsset(GlobalVar.ASSET_ID); // Call api get asset by assetId
+        try {
+            Response<Asset> response = call.execute(); // Get response from server
+            if (response.isSuccessful()) { // If success
+                Asset.setMe(response.body());
+                Log.d(GlobalVar.LOG_TAG, "Asset: " + Asset.getMe()
+                        .getAttributes()
+                        .getTemperature()
+                        .getValue()); // Log asset
+            }
+            else { Log.d(GlobalVar.LOG_TAG, "getAsset: Not Successful"); } // If fail
         } catch (IOException e) {
 //            e.printStackTrace();
             Log.d(GlobalVar.LOG_TAG, "exception: " + e.getMessage()); // Print exception
