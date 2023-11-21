@@ -28,7 +28,7 @@ public class ApiManager {
                 Token token = response.body(); // Assign response to token
                 assert token != null;
                 ApiClient.token = token.getAccess_token(); // Update Api client token
-                Log.d(GlobalVar.LOG_TAG, "token: " + ApiClient.token); // Log Api client token
+                Log.d(GlobalVar.LOG_TAG, "getToken: " + ApiClient.token); // Log Api client token
                 return token; // Return token
             }
             else { Log.d(GlobalVar.LOG_TAG, "getToken: Not Successful"); } // If fail
@@ -46,7 +46,7 @@ public class ApiManager {
             Response<User> response = call.execute(); // Get response from server
             if (response.isSuccessful()) { // If success
                 User.setMe(response.body()); // Set me with repose
-                Log.d(GlobalVar.LOG_TAG, "Username: " + User.getMe().getUsername()); // Log username
+                Log.d(GlobalVar.LOG_TAG, "getUser: " + User.getMe().getUsername()); // Log username
             }
             else { Log.d(GlobalVar.LOG_TAG, "getUser: Not Successful"); } // If fail
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class ApiManager {
             Response<Asset> response = call.execute(); // Get response from server
             if (response.isSuccessful()) { // If success
                 Asset.setMe(response.body());
-                Log.d(GlobalVar.LOG_TAG, "Asset: " + Asset.getMe()
+                Log.d(GlobalVar.LOG_TAG, "getAsset: " + Asset.getMe()
                         .getAttributes()
                         .getTemperature()
                         .getValue()); // Log asset

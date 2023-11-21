@@ -199,21 +199,28 @@ public class LoginActivity extends BaseActivity {
                 boolean notExpired = remainingTimeStamp > 0;
                 if (notExpired) {
                     Log.d(GlobalVar.LOG_TAG, "Token expired in: " + remainingTimeStamp); // Log remaining time
-
-                    Message msg = handler.obtainMessage(); // Create message
-                    Bundle bundle = new Bundle(); // Create bundle
-                    bundle.putBoolean("IS_OK", true); // Put true to bundle
-                    msg.setData(bundle); // Set message data
-                    handler.sendMessage(msg);  // Send message through bundle
+                }
+                else { // If token expired
+                    Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
+                    assert token != null; // No null token
+                    long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
+                    token.setExpires_in(expired); // Set expired timestamp
+                    LocalDataManager.setToken(token); // Save token to local
                 }
             }
-            else {
+            else { // If no token found
                 Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
                 assert token != null; // No null token
                 long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
                 token.setExpires_in(expired); // Set expired timestamp
                 LocalDataManager.setToken(token); // Save token to local
             }
+
+            Message msg = handler.obtainMessage(); // Create message
+            Bundle bundle = new Bundle(); // Create bundle
+            bundle.putBoolean("IS_OK", true); // Put true to bundle
+            msg.setData(bundle); // Set message data
+            handler.sendMessage(msg);  // Send message through bundle
         }).start();
     }
 
