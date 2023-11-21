@@ -43,7 +43,7 @@
     <string name="wind_direction">Wind direction</string>
     <string name="wind_dir_sample" translatable="false">80</string>
     <string name="uiot" translatable="false">UIOT</string>
-    <string name="manufacture">Manufacture</string>
+    <string name="manufacture">Manufacturer</string>
     <string name="location">Location</string>
     <string name="location_sample" translatable="false">Bien Hoa</string>
     <string name="unknown" translatable="false">---</string>

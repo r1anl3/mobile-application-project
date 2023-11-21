@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -143,9 +144,9 @@ public class HomeFragment extends Fragment {
                     .getValue();
             String userName = User.getMe().getUsername(); // Get username
             String temperature = tempVal + "";  // Get current temperature
-            String rainFall = rainFallVal + "%"; // Get current rainfall
+            String rainFall = rainFallVal + " mm"; // Get current rainfall
             String humidity = humidVal + "%"; // Get current humidity
-            String windSpeed = windSpeedVal + " km/h"; // Get current wind speed
+            String windSpeed = windSpeedVal + " m/s"; // Get current wind speed
             String windDir = windDirVal + ""; // Get current wind direction
             String manufacturer = Asset.getMe()
                     .getAttributes()
@@ -157,7 +158,7 @@ public class HomeFragment extends Fragment {
                     .getValue(); // Get current location
             String dateTime = getCurrDatetime(); // Get current datetime
             String validity = getKeyValidity();
-            String weatherStatus = getWeatherStatus(tempVal, humidVal, windSpeedVal);
+            String weatherStatus = getWeatherStatus(tempVal, humidVal, windSpeedVal, rainFallVal);
 
             tv_greed.setText(userName); // Set username
             tv_temp.setText(temperature); // Set temperature
@@ -196,25 +197,40 @@ public class HomeFragment extends Fragment {
                 tvWeaSta.setText(R.string.windy);
                 imgCurrWea.setImageResource(R.drawable.windy);
                 break;
-            default:
-                imgCurrWea.setImageResource(R.drawable.cloudy_sunny);
-                break;
         }
     }
 
-    private String getWeatherStatus(float temp, float humid, float windSpeed) {
-        //TODO: Process temperature, humidity, wind speed values and return weather status
-        String weaSta = "cloudy";
-        return weaSta;
-    }
+    private String getWeatherStatus(float temp, float humid, float windSpeed, float rainFall) {
+        // Process temperature, humidity, wind speed values and return weather status
+        String[] weaSta = {"cloudy", "cloudy_sunny", "rainy", "sunny", "windy"};
+        String currSta = "";
+        if (humid > 60 && temp < 30) {
+            currSta = weaSta[0];
+        }
+        else if (temp >= 30 && humid < 60) {
+            currSta = weaSta[3];
+        }
+        else if (humid > 60 && temp > 30) {
+            currSta = weaSta[1];
+        }
+        if (windSpeed > 10) {
+            currSta = weaSta[4];
+        }
+        if (rainFall > 50) {
+            currSta = weaSta[2];
+        }
 
+        return currSta;
+    }
+    @SuppressLint("SimpleDateFormat")
     private String getKeyValidity() {
-        Date date = new Date(LocalDataManager.getToken().getExpires_in());
-        Log.d(GlobalVar.LOG_TAG, "getKeyValidity: " + date);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return dateFormat.format(date);
+        Date date = new Date(LocalDataManager.getToken().getExpires_in()); // Get expired date
+        Log.d(GlobalVar.LOG_TAG, "getKeyValidity: " + date); // Log date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm"); // Date formatter
+        return dateFormat.format(date); // Return formatted date
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getCurrDatetime() {
         // Get current datetime and format it
         DateFormat dateFormat = new SimpleDateFormat("EE MMM dd | HH:mm aaa"); // Datetime formatter

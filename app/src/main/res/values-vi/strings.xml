@@ -31,9 +31,9 @@
     <string name="today">Hôm nay</string>
     <string name="windSpeed">Tốc độ gió</string>
     <string name="humidity">Độ ẩm</string>
-    <string name="rainfall">Khả năng mưa</string>
+    <string name="rainfall">Lượng mưa</string>
     <string name="wind_direction">Hướng gió</string>
-    <string name="manufacture">Sản xuất</string>
+    <string name="manufacture">Đơn vị</string>
     <string name="location">Địa điểm</string>
     <string name="key_validity">Hiệu lực</string>
     <string name="cloudy">Trời nhiều mây</string>
