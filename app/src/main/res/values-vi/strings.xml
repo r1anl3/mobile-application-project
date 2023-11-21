@@ -35,4 +35,10 @@
     <string name="wind_direction">Hướng gió</string>
     <string name="manufacture">Sản xuất</string>
     <string name="location">Địa điểm</string>
+    <string name="key_validity">Hiệu lực</string>
+    <string name="cloudy">Trời nhiều mây</string>
+    <string name="sunny_cloudy">Nhiều nắng và mây</string>
+    <string name="sunny">Trời nhiều nắng</string>
+    <string name="rainy">Có khả năng mưa</string>
+    <string name="windy">Gió mạnh</string>
 </resources>

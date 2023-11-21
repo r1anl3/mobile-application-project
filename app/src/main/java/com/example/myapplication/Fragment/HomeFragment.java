@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
+import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
@@ -23,6 +26,7 @@ import com.example.myapplication.R;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
     DashboardActivity parentActivity;
@@ -38,6 +42,7 @@ public class HomeFragment extends Fragment {
     private TextView tv_windDir;
     private TextView tv_manufacture;
     private TextView tv_location;
+    private TextView tv_key;
     Handler handler;
     public HomeFragment() {
     }
@@ -86,6 +91,7 @@ public class HomeFragment extends Fragment {
         tv_windDir = view.findViewById(R.id.tv_windDir);
         tv_manufacture = view.findViewById(R.id.tv_manufacture);
         tv_location = view.findViewById(R.id.tv_location);
+        tv_key = view.findViewById(R.id.tv_key);
     }
 
     private void InitialEvents() {
@@ -115,27 +121,32 @@ public class HomeFragment extends Fragment {
         boolean hasUserInfo = User.getMe() != null;
         boolean hasAsset = Asset.getMe() != null;
         if (hasUserInfo && hasAsset)  {
-            String userName = User.getMe().getUsername(); // Get username
-            String temperature = Asset.getMe()
+            float tempVal = Asset.getMe()
                     .getAttributes()
                     .getTemperature()
-                    .getValue() + "";  // Get current temperature
-            String rainFall = Asset.getMe()
+                    .getValue();
+            float rainFallVal = Asset.getMe()
                     .getAttributes()
                     .getRainfall()
-                    .getValue() * 100 + "%"; // Get current rainfall
-            String humidity = Asset.getMe()
+                    .getValue() * 100;
+            float humidVal = Asset.getMe()
                     .getAttributes()
                     .getHumidity()
-                    .getValue() + "%"; // Get current humidity
-            String windSpeed = Asset.getMe()
+                    .getValue();
+            float windSpeedVal = Asset.getMe()
                     .getAttributes()
                     .getWindSpeed()
-                    .getValue() + " km/h"; // Get current wind speed
-            String windDir = Asset.getMe()
+                    .getValue();
+            float windDirVal = Asset.getMe()
                     .getAttributes()
                     .getWindDirection()
-                    .getValue() + ""; // Get current wind direction
+                    .getValue();
+            String userName = User.getMe().getUsername(); // Get username
+            String temperature = tempVal + "";  // Get current temperature
+            String rainFall = rainFallVal + "%"; // Get current rainfall
+            String humidity = humidVal + "%"; // Get current humidity
+            String windSpeed = windSpeedVal + " km/h"; // Get current wind speed
+            String windDir = windDirVal + ""; // Get current wind direction
             String manufacturer = Asset.getMe()
                     .getAttributes()
                     .getManufacturer()
@@ -145,6 +156,8 @@ public class HomeFragment extends Fragment {
                     .getPlace()
                     .getValue(); // Get current location
             String dateTime = getCurrDatetime(); // Get current datetime
+            String validity = getKeyValidity();
+            String weatherStatus = getWeatherStatus(tempVal, humidVal, windSpeedVal);
 
             tv_greed.setText(userName); // Set username
             tv_temp.setText(temperature); // Set temperature
@@ -155,7 +168,51 @@ public class HomeFragment extends Fragment {
             tv_manufacture.setText(manufacturer); // Set manufacturer
             tv_location.setText(location); // Set location
             tv_dateTime.setText(dateTime); // Set datetime
+            tv_key.setText(validity);
+            setCurrWea(weatherStatus, img_currWea, tv_weaSta);
         }
+    }
+
+    private void setCurrWea(String weatherStatus, ImageView imgCurrWea, TextView tvWeaSta) {
+        // Update img according to weather status
+        switch (weatherStatus) {
+            case "cloudy":
+                tvWeaSta.setText(R.string.cloudy);
+                imgCurrWea.setImageResource(R.drawable.cloudy);
+                break;
+            case "cloudy_sunny":
+                tvWeaSta.setText(R.string.sunny_cloudy);
+                imgCurrWea.setImageResource(R.drawable.cloudy_sunny);
+                break;
+            case "rainy":
+                tvWeaSta.setText(R.string.rainy);
+                imgCurrWea.setImageResource(R.drawable.rainy);
+                break;
+            case "sunny":
+                tvWeaSta.setText(R.string.sunny);
+                imgCurrWea.setImageResource(R.drawable.sunny);
+                break;
+            case "windy":
+                tvWeaSta.setText(R.string.windy);
+                imgCurrWea.setImageResource(R.drawable.windy);
+                break;
+            default:
+                imgCurrWea.setImageResource(R.drawable.cloudy_sunny);
+                break;
+        }
+    }
+
+    private String getWeatherStatus(float temp, float humid, float windSpeed) {
+        //TODO: Process temperature, humidity, wind speed values and return weather status
+        String weaSta = "cloudy";
+        return weaSta;
+    }
+
+    private String getKeyValidity() {
+        Date date = new Date(LocalDataManager.getToken().getExpires_in());
+        Log.d(GlobalVar.LOG_TAG, "getKeyValidity: " + date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return dateFormat.format(date);
     }
 
     private String getCurrDatetime() {

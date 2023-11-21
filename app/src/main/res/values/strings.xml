@@ -47,4 +47,10 @@
     <string name="location">Location</string>
     <string name="location_sample" translatable="false">Bien Hoa</string>
     <string name="unknown" translatable="false">---</string>
+    <string name="key_validity">Key validity</string>
+    <string name="cloudy">Cloudy Sky</string>
+    <string name="sunny_cloudy">Sunny Cloudy Sky</string>
+    <string name="sunny">Sunny Sky</string>
+    <string name="rainy">Chance of rain</string>
+    <string name="windy">Strong wind</string>
 </resources>
