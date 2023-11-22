@@ -78,7 +78,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void openChangePasswordActivity() {
         // Open Change password activity
-        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
         startActivities(new Intent[]{intent});
     }
 
