@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.R;
 
-public class DeviceFragment extends Fragment {
+public class ChartFragment extends Fragment {
     DashboardActivity parentActivity;
-    public DeviceFragment() {
+    public ChartFragment() {
         // Required empty public constructor
     }
 
-    public DeviceFragment(DashboardActivity activity) {
+    public ChartFragment(DashboardActivity activity) {
         this.parentActivity = activity;
     }
     @Override
