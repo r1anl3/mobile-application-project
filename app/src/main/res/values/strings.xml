@@ -53,4 +53,13 @@
     <string name="sunny">Sunny Sky</string>
     <string name="rainy">Chance of rain</string>
     <string name="windy">Strong wind</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="realm" translatable="false">Realm</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="status">Status</string>
+    <string name="enabled">Enabled</string>
+    <string name="history">History</string>
+    <string name="create_on">Create on</string>
 </resources>

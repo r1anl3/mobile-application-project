@@ -41,4 +41,11 @@
     <string name="sunny">Trời nhiều nắng</string>
     <string name="rainy">Có khả năng mưa</string>
     <string name="windy">Gió mạnh</string>
+    <string name="name">Tên đầy đủ</string>
+    <string name="first_name">Họ</string>
+    <string name="last_name">Tên</string>
+    <string name="status">Trạng thái</string>
+    <string name="enabled">Được kích hoạt</string>
+    <string name="history">Lịch sử</string>
+    <string name="create_on">Đã đăng ký</string>
 </resources>
