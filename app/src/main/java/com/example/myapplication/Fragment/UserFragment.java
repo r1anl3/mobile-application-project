@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import android.widget.TextView;
 
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
-import com.example.myapplication.GlobalVar;
-import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
