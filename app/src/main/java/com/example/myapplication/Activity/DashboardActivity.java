@@ -1,6 +1,5 @@
 package com.example.myapplication.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,8 +9,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.myapplication.API.ApiClient;
-import com.example.myapplication.Fragment.DeviceFragment;
-import com.example.myapplication.Fragment.HomeFragment;
+import com.example.myapplication.Fragment.ChartFragment;
+import com.example.myapplication.Fragment.FeatureFragment;
 import com.example.myapplication.Fragment.MapFragment;
 import com.example.myapplication.Fragment.UserFragment;
 import com.example.myapplication.GlobalVar;
@@ -20,8 +19,8 @@ import com.example.myapplication.R;
 
 public class DashboardActivity extends BaseActivity {
     private FragmentManager fm;
-    private HomeFragment homeFrag;
-    private DeviceFragment devFrag;
+    private FeatureFragment featureFrag;
+    private ChartFragment devFrag;
     private MapFragment mapFrag;
     private UserFragment userFrag;
     private Fragment currFrag;
@@ -36,16 +35,16 @@ public class DashboardActivity extends BaseActivity {
         InitialViews();
         InitialEvents();
 
-        fm.beginTransaction().add(R.id.main_frame, homeFrag, "home").commit(); // Add home fragment on create
-        currFrag = homeFrag;
+        fm.beginTransaction().add(R.id.main_frame, mapFrag, null).commit(); // Add home fragment on create
+        currFrag = mapFrag;
     }
 
 
     private void InitialVars() {
         // Initial variables
         fm = getSupportFragmentManager(); // Create Fragment manager
-        homeFrag = new HomeFragment(DashboardActivity.this); // Create Home fragment
-        devFrag = new DeviceFragment(DashboardActivity.this);// Create Device fragment
+        featureFrag = new FeatureFragment(DashboardActivity.this); // Create Home fragment
+        devFrag = new ChartFragment(DashboardActivity.this);// Create Device fragment
         mapFrag = new MapFragment(DashboardActivity.this); // Create Map fragment
         userFrag = new UserFragment(DashboardActivity.this); // Create User fragment
     }
@@ -61,9 +60,9 @@ public class DashboardActivity extends BaseActivity {
     private void InitialEvents() {
         // Initial events
         setApiToken(); // Set Api token from local to ApiClient
-        ic_home.setOnClickListener(view -> replaceFragment(homeFrag)); // Replace home fragment
+        ic_home.setOnClickListener(view -> replaceFragment(mapFrag)); // Replace home fragment
         ic_dev.setOnClickListener(view -> replaceFragment(devFrag)); // Replace device fragment
-        ic_map.setOnClickListener(view -> replaceFragment(mapFrag)); // Replace map fragment
+        ic_map.setOnClickListener(view -> replaceFragment(featureFrag)); // Replace map fragment
         ic_user.setOnClickListener(view -> replaceFragment(userFrag)); // Replace user fragment
     }
 
@@ -90,8 +89,8 @@ public class DashboardActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (currFrag != homeFrag) { // If not home fragment
-            replaceFragment(homeFrag); // Replace home fragment
+        if (currFrag != mapFrag) { // If not home fragment
+            replaceFragment(mapFrag); // Replace home fragment
         }
         else { // In home fragment
             openMainActivity(); // open main activity
