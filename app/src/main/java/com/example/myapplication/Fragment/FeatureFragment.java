@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class HomeFragment extends Fragment {
+public class FeatureFragment extends Fragment {
     DashboardActivity parentActivity;
     private TextView tv_greed;
     private TextView tv_weaSta;
@@ -45,10 +45,10 @@ public class HomeFragment extends Fragment {
     private TextView tv_location;
     private TextView tv_key;
     Handler handler;
-    public HomeFragment() {
+    public FeatureFragment() {
     }
 
-    public HomeFragment(DashboardActivity activity) {
+    public FeatureFragment(DashboardActivity activity) {
         this.parentActivity = activity;
     }
     @Override
