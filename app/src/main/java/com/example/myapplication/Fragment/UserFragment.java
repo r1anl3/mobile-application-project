@@ -24,7 +24,7 @@ import java.util.Date;
 
 public class UserFragment extends Fragment {
     DashboardActivity parentActivity;
-    TextView tv_username, tv_firstName, tv_lastName, tv_id, tv_email, tv_enable, tv_CreateOn, tv_realm;
+    TextView tv_username, tv_firstName, tv_lastName, tv_email, tv_enable, tv_CreateOn, tv_realm;
     Handler handler;
     public UserFragment() {
         // Required empty public constructor
@@ -65,7 +65,6 @@ public class UserFragment extends Fragment {
         boolean hasUserInfo = User.getMe() != null;
         if (hasUserInfo) {
             String username = User.getMe().getUsername();
-            String id = User.getMe().getId();
             String firstName = User.getMe().getFirstName();
             String lastName = User.getMe().getLastName();
             String email = User.getMe().getEmail();
@@ -76,7 +75,6 @@ public class UserFragment extends Fragment {
             tv_username.setText(username);
             tv_firstName.setText(firstName);
             tv_lastName.setText(lastName);
-            tv_id.setText(id);
             tv_email.setText(email);
             tv_enable.setText(enable);
             tv_CreateOn.setText(createdOn);
@@ -97,7 +95,9 @@ public class UserFragment extends Fragment {
 
     private void getInfo() {
         new Thread(() -> { // new thread
-            ApiManager.getUser(); // Get user
+            if (User.getMe() == null) {
+                ApiManager.getUser(); // Get user
+            }
 
             Message msg = handler.obtainMessage(); // Create message
             Bundle bundle = new Bundle(); // Create bundle
@@ -109,7 +109,6 @@ public class UserFragment extends Fragment {
 
     private void InitialViews(View view) {
         tv_username = view.findViewById(R.id.tv_username);
-        tv_id = view.findViewById(R.id.tv_id);
         tv_CreateOn = view.findViewById(R.id.tv_createOn);
         tv_firstName = view.findViewById(R.id.tv_firstName);
         tv_lastName = view.findViewById(R.id.tv_lastName);
