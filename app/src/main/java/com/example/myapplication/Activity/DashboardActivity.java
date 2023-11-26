@@ -78,7 +78,7 @@ public class DashboardActivity extends BaseActivity {
         Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         // Replace fragment, kill old fragment
         currFrag = fragment; // Update current fragment
         FragmentTransaction transaction = fm.beginTransaction(); // Create Fragment transaction
