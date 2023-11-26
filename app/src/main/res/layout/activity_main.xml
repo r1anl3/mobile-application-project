@@ -91,13 +91,13 @@
                 android:text="@string/sign_up" />
 
             <Button
-                android:id="@+id/btn_signIpWithGoogle"
+                android:id="@+id/btn_noSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/btn_signUp"
-                android:text="@string/continue_with_google"/>
+                android:text="@string/continue_using"/>
 
             <Button
                 android:id="@+id/btn_resetPassword"

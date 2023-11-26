@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
@@ -21,6 +22,8 @@ import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
+import java.sql.Timestamp;
+
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn;
     private Button btn_back;
@@ -30,7 +33,7 @@ public class LoginActivity extends BaseActivity {
     private LoadingAlert loadingAlert;
     private EditText et_user;
     private EditText et_password;
-    private WebView webView;
+    Handler handler;
     private static final String tokenUser = "user";
     private static final String tokenPass = "123";
 
@@ -75,8 +78,20 @@ public class LoginActivity extends BaseActivity {
             boolean isValidInformation = validateForm(user, password);
             if (isValidInformation) {
                 loadingAlert.startAlertDialog();
-//                    getToken(user, password);
-                getTokenByInfo();
+                authenticateUser(user, password);
+
+                handler = new Handler(message -> { // Handle message
+                    Bundle bundle = message.getData(); // Get message
+                    boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+                    if (!isOk) return false; // If not ok return
+
+                    loadingAlert.closeAlertDialog(); // Close loading
+                    signInLog(getString(R.string.success_warning)); // Print message to user
+                    openDashboardActivity(); // Open dashboard activity
+                    finish(); // Finish Login activity
+
+                    return false;
+                });
             }
         });
 
@@ -126,12 +141,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void getToken(String user, String password) {
-        // Get login token
+    private void authenticateUser(String user, String password) {
+        // Authentication
         CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
 //        webView.setVisibility(View.VISIBLE);
-        webView = new WebView(LoginActivity.this); // Create new web view
+        WebView webView = new WebView(LoginActivity.this); // Create new web view
         webView.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -157,17 +172,13 @@ public class LoginActivity extends BaseActivity {
                 });
 
                 if (url.contains("manager/#state=")) { // Login success, open dashboard
-                    loadingAlert.closeAlertDialog(); // Close loading
-                    signInLog(getString(R.string.success_warning));
                     String code = url.split("&code=")[1];
                     Log.d(GlobalVar.LOG_TAG, "success: " + code);
-                    openDashboardActivity();
-                    finish();
+                    getTokenByInfo();
+
                 }
 
-                String cookies = CookieManager.getInstance().getCookie(url); // Log cookies
-                Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
-                Log.d(GlobalVar.LOG_TAG, "url : " + url);
+                Log.d(GlobalVar.LOG_TAG, "url : " + url);// Log url
                 super.onPageFinished(view, url);
             }
         });
@@ -176,19 +187,44 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getTokenByInfo() {
-        // TODO: Get token if no token in local or token expired
+        // Get token if no token in local or token expired
         new Thread(() -> {
-            Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
+            long currTimeStamp = getTimeStamp(); // Get current time stamp
+            Log.d(GlobalVar.LOG_TAG, "current timestamp: " + currTimeStamp); // Log current time stamp
             LocalDataManager.Init(LoginActivity.this); // Create local data manager
 
-            LocalDataManager.setToken(token); // Save token to local
-            Log.d(GlobalVar.LOG_TAG, "getTokenByInfo: " + LocalDataManager.getToken().access_token); // Get token access from local
-            loadingAlert.closeAlertDialog();
+            boolean havingToken = LocalDataManager.getToken() != null;
+            if (havingToken) {
+                long remainingTimeStamp = LocalDataManager.getToken().getExpires_in() - currTimeStamp;
+                boolean notExpired = remainingTimeStamp > 0;
+                if (notExpired) {
+                    Log.d(GlobalVar.LOG_TAG, "Token expired in: " + remainingTimeStamp); // Log remaining time
+                }
+                else { // If token expired
+                    Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
+                    assert token != null; // No null token
+                    long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
+                    token.setExpires_in(expired); // Set expired timestamp
+                    LocalDataManager.setToken(token); // Save token to local
+                }
+            }
+            else { // If no token found
+                Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
+                assert token != null; // No null token
+                long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
+                token.setExpires_in(expired); // Set expired timestamp
+                LocalDataManager.setToken(token); // Save token to local
+            }
+
+            Message msg = handler.obtainMessage(); // Create message
+            Bundle bundle = new Bundle(); // Create bundle
+            bundle.putBoolean("IS_OK", true); // Put true to bundle
+            msg.setData(bundle); // Set message data
+            handler.sendMessage(msg);  // Send message through bundle
         }).start();
     }
 
     private void signInLog(String s) {
         Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
     }
-
 }

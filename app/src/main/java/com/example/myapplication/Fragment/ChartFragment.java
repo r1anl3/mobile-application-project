@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.R;
 
-public class DeviceFragment extends Fragment {
+public class ChartFragment extends Fragment {
     DashboardActivity parentActivity;
-    public DeviceFragment() {
+    public ChartFragment() {
         // Required empty public constructor
     }
 
-    public DeviceFragment(DashboardActivity activity) {
+    public ChartFragment(DashboardActivity activity) {
         this.parentActivity = activity;
     }
     @Override
@@ -29,6 +29,6 @@ public class DeviceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_device, container, false);
+        return inflater.inflate(R.layout.fragment_chart, container, false);
     }
 }

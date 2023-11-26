@@ -6,24 +6,27 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.myapplication.API.ApiManager;
+import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
+import com.example.myapplication.Manager.LocalDataManager;
+import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Main Activity";
     private long backPressedTime;
     private Toast mToast;
-    private Button btn_signUp;
-    private Button btn_signIn;
-    private Button btn_signInWithGoogle;
-    private Button btn_resetPassword;
+    private Button btn_signUp, btn_signIn, btn_noSignIn, btn_resetPassword;
     private ImageButton btn_changeLanguage;
     private LoadingAlert loadingAlert;
+    private Handler handler;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -42,7 +45,7 @@ public class MainActivity extends BaseActivity {
         btn_signUp = findViewById(R.id.btn_signUp);
         btn_signIn = findViewById(R.id.btn_signIn);
         btn_changeLanguage = findViewById(R.id.btn_changeLanguage);
-        btn_signInWithGoogle = findViewById(R.id.btn_signIpWithGoogle);
+        btn_noSignIn = findViewById(R.id.btn_noSignIn);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
         loadingAlert = new LoadingAlert(MainActivity.this);
     }
@@ -74,15 +77,39 @@ public class MainActivity extends BaseActivity {
             onPasswordReset();
         });
 
-        btn_signInWithGoogle.setOnClickListener(view -> {
+        btn_noSignIn.setOnClickListener(view -> {
             // Open sign in with Google method
             loadingAlert.startAlertDialog();
-
+            
+            boolean isValidCredential = checkCredential(); // Check credential validity
             new Handler().postDelayed(() -> {
                 loadingAlert.closeAlertDialog();
-                signInWithGoogle();
-            },1000);
+
+                if (isValidCredential) {
+                    openDashboardActivity();
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.continue_log, Toast.LENGTH_SHORT).show();
+                }
+            }, 1000);
         });
+    }
+
+    private boolean checkCredential() {
+        long currTimeStamp = getTimeStamp(); // Get current time stamp
+        Log.d(GlobalVar.LOG_TAG, "current timestamp: " + currTimeStamp); // Log current time stamp
+        LocalDataManager.Init(MainActivity.this); // Create local data manager
+
+        boolean havingToken = LocalDataManager.getToken() != null;
+        if (havingToken) {
+            long remainingTimeStamp = LocalDataManager.getToken().getExpires_in() - currTimeStamp;
+            boolean notExpired = remainingTimeStamp > 0;
+            if (notExpired) {
+                Log.d(GlobalVar.LOG_TAG, "Token expired in: " + remainingTimeStamp); // Log remaining time
+                return true;
+            }
+        }
+        return false;
     }
 
     private void onPasswordReset() {

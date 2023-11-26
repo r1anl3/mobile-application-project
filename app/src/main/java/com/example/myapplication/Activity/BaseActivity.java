@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.Manager.LanguageManager;
 import com.example.myapplication.R;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class BaseActivity extends AppCompatActivity {
@@ -78,7 +79,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void openChangePasswordActivity() {
         // Open Change password activity
-        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
         startActivities(new Intent[]{intent});
     }
 
@@ -107,5 +108,9 @@ public class BaseActivity extends AppCompatActivity {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
+    public long getTimeStamp() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // Get system timestamp in milliseconds
+        return timestamp.getTime();
+    }
 }
 

@@ -20,7 +20,7 @@
     <string name="data_time" translatable="false">Mon Oct 16 | 08:00 AM</string>
     <string name="curr_temp" translatable="false">25</string>
     <string name="degree_symbol" translatable="false">°</string>
-    <string name="greed_user">Hi, Vu</string>
+    <string name="greed_user">Hi,</string>
     <string name="form_warning">This field required!</string>
     <string name="password_warning">Password do not match!</string>
     <string name="signup_warning">Can not sign up!</string>
@@ -43,7 +43,25 @@
     <string name="wind_direction">Wind direction</string>
     <string name="wind_dir_sample" translatable="false">80</string>
     <string name="uiot" translatable="false">UIOT</string>
-    <string name="manufacture">Manufacture</string>
+    <string name="manufacture">Manufacturer</string>
     <string name="location">Location</string>
     <string name="location_sample" translatable="false">Bien Hoa</string>
+    <string name="unknown" translatable="false">---</string>
+    <string name="key_validity">Key validity</string>
+    <string name="cloudy">Cloudy Sky</string>
+    <string name="sunny_cloudy">Sunny Cloudy Sky</string>
+    <string name="sunny">Sunny Sky</string>
+    <string name="rainy">Chance of rain</string>
+    <string name="windy">Strong wind</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="realm" translatable="false">Realm</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="status">Status</string>
+    <string name="enabled">Enabled</string>
+    <string name="history">History</string>
+    <string name="create_on">Create on</string>
+    <string name="continue_using">CONTINUE WITHOUT SIGN IN</string>
+    <string name="continue_log">Your credential expired!</string>
 </resources>
