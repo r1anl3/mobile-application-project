@@ -227,10 +227,4 @@ public class LoginActivity extends BaseActivity {
     private void signInLog(String s) {
         Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
     }
-
-    private long getTimeStamp() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // Get system timestamp in milliseconds
-        return timestamp.getTime();
-    }
-
 }
