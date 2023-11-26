@@ -62,4 +62,6 @@
     <string name="enabled">Enabled</string>
     <string name="history">History</string>
     <string name="create_on">Create on</string>
+    <string name="continue_using">CONTINUE WITHOUT SIGN IN</string>
+    <string name="continue_log">Your credential expired!</string>
 </resources>

@@ -48,4 +48,6 @@
     <string name="enabled">Được kích hoạt</string>
     <string name="history">Lịch sử</string>
     <string name="create_on">Đã đăng ký</string>
+    <string name="continue_using">Tiếp tục sử dụng</string>
+    <string name="continue_log">Vui lòng đăng nhập!</string>
 </resources>
