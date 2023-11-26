@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class MapFragment extends Fragment {
     DashboardActivity parentActivity;
     Handler handler;
     MapView mapView;
+    ImageButton btn_zoomIn, btn_zoomOut;
     double aLat;
     double aLong;
     Attribute attribute;
@@ -81,20 +83,24 @@ public class MapFragment extends Fragment {
             boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
-//            setMap(10.869905172970164,106.80345028525176);
+            setMap(10.869905172970164,106.80345028525176);
             setMap(aLat, aLong);
-            super.onViewCreated(view, savedInstanceState);
 
             return false;
         });
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void InitialViews(View view) {
         mapView = view.findViewById(R.id.mv_mapView);
+        btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
+        btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
     }
 
     private void InitialEvents() {
         getInfo();
+        btn_zoomIn.setOnClickListener(view -> mapView.getController().zoomIn());
+        btn_zoomOut.setOnClickListener(view -> mapView.getController().zoomOut());
     }
     private void getInfo() {
         // Get information about user, weather assets
@@ -105,8 +111,10 @@ public class MapFragment extends Fragment {
                 ApiManager.queryDevices(query);
             }
 
-            assert Device.getDevicesList() != null;
-            ApiManager.getAsset(Device.getDevicesList().get(0).getId());
+            if (Asset.getMe() == null) {
+                assert Device.getDevicesList() != null;
+                ApiManager.getAsset(Device.getDevicesList().get(0).getId());
+            }
 
             attribute = Asset.getMe().getAttributes();
             aLat = attribute.getLocation()
