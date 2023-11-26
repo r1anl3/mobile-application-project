@@ -30,7 +30,10 @@ import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Attribute;
+import com.example.myapplication.Model.Device;
 import com.example.myapplication.R;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -75,9 +78,10 @@ public class MapFragment extends Fragment {
 
         handler = new Handler(message -> { // Handle message
             Bundle bundle = message.getData(); // Get message
-            boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+            boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
+//            setMap(10.869905172970164,106.80345028525176);
             setMap(aLat, aLong);
             super.onViewCreated(view, savedInstanceState);
 
@@ -95,7 +99,14 @@ public class MapFragment extends Fragment {
     private void getInfo() {
         // Get information about user, weather assets
         new Thread(() -> { // new thread
-            ApiManager.getAsset(); // Get asset
+            if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
+                String queryString = "{ \"realm\": { \"name\": \"master\" }}";
+                JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
+                ApiManager.queryDevices(query);
+            }
+
+            assert Device.getDevicesList() != null;
+            ApiManager.getAsset(Device.getDevicesList().get(0).getId());
 
             attribute = Asset.getMe().getAttributes();
             aLat = attribute.getLocation()
@@ -107,7 +118,7 @@ public class MapFragment extends Fragment {
 
             Message msg = handler.obtainMessage(); // Create message
             Bundle bundle = new Bundle(); // Create bundle
-            bundle.putBoolean("IS_OK", true); // Put data to bundle
+            bundle.putBoolean("DEVICE_OK", true); // Put data to bundle
             msg.setData(bundle); // Set message data
             handler.sendMessage(msg);  // Send message through bundle
         }).start();
@@ -127,7 +138,7 @@ public class MapFragment extends Fragment {
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.INTERNET
         }); // Required permissions
-        mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS); // Set zoom controller
+        mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); // Set zoom controller
         mapView.setMultiTouchControls(true); // Enable multitouch
 
 

@@ -4,10 +4,13 @@ import android.util.Log;
 
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Model.Asset;
+import com.example.myapplication.Model.Device;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -55,9 +58,9 @@ public class ApiManager {
         }
     }
 
-    public static void getAsset() {
+    public static void getAsset(String assetId) {
         // Get user info
-        Call<Asset> call = service.getAsset(GlobalVar.ASSET_ID); // Call api get asset by assetId
+        Call<Asset> call = service.getAsset(assetId); // Call api get asset by assetId
         try {
             Response<Asset> response = call.execute(); // Get response from server
             if (response.isSuccessful()) { // If success
@@ -73,4 +76,21 @@ public class ApiManager {
             Log.d(GlobalVar.LOG_TAG, "exception: " + e.getMessage()); // Print exception
         }
     }
+
+    public static void queryDevices(JsonObject body) {
+        // Get all devices
+        Call<List<Device>> call = service.queryDevices(body); // Call api post all devices
+        try {
+            Response<List<Device>> response = call.execute(); // Get response
+            if (response.isSuccessful() && response.code() == 200) { //
+                List<Device> deviceList = response.body(); // Assign response to list devices
+                Device.setDevicesList(deviceList); // Set device list
+                Log.d(GlobalVar.LOG_TAG, "queryDevices: " + Device.getDevicesList().size()); // Log api
+            } else {
+                Device.setDevicesList(null);
+                Log.d(GlobalVar.LOG_TAG, "queryDevices: Not successful");
+            }
+        } catch (IOException e) { e.printStackTrace();}
+    }
+
 }

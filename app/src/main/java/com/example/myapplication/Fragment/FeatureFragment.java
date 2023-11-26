@@ -21,6 +21,7 @@ import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Asset;
+import com.example.myapplication.Model.Device;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
@@ -107,7 +108,7 @@ public class FeatureFragment extends Fragment {
                 ApiManager.getUser(); // Get user
             }
 
-            ApiManager.getAsset(); // Get asset
+            ApiManager.getAsset(Device.getDevicesList().get(0).getId()); // Get asset
 
             Message msg = handler.obtainMessage(); // Create message
             Bundle bundle = new Bundle(); // Create bundle
