@@ -69,7 +69,7 @@ public class UserFragment extends Fragment {
             String lastName = User.getMe().getLastName();
             String email = User.getMe().getEmail();
             String enable = String.valueOf(User.getMe().isEnabled());
-            String createdOn = getCreatedOn();
+            String createdOn = getCreatedOn(User.getMe().getCreatedOn());
             String realm = User.getMe().getRealm();
 
             tv_username.setText(username);
@@ -83,8 +83,8 @@ public class UserFragment extends Fragment {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private String getCreatedOn() {
-        Date date = new Date(User.getMe().getCreatedOn()); // Get expired date
+    private String getCreatedOn(long timestamp) {
+        Date date = new Date(timestamp); // Get expired date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm"); // Date formatter
         return dateFormat.format(date); // Return formatted date
     }
