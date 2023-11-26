@@ -129,7 +129,7 @@ public class FeatureFragment extends Fragment {
             float rainFallVal = Asset.getMe()
                     .getAttributes()
                     .getRainfall()
-                    .getValue() * 100;
+                    .getValue();
             float humidVal = Asset.getMe()
                     .getAttributes()
                     .getHumidity()
@@ -146,7 +146,7 @@ public class FeatureFragment extends Fragment {
             String temperature = tempVal + "";  // Get current temperature
             String rainFall = rainFallVal + " mm"; // Get current rainfall
             String humidity = humidVal + "%"; // Get current humidity
-            String windSpeed = windSpeedVal + " m/s"; // Get current wind speed
+            String windSpeed = windSpeedVal + " km/h"; // Get current wind speed
             String windDir = windDirVal + ""; // Get current wind direction
             String manufacturer = Asset.getMe()
                     .getAttributes()
