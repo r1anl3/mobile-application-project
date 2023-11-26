@@ -1,6 +1,7 @@
 package com.example.myapplication.Model;
 
 import com.example.myapplication.Model.Object.Humidity;
+import com.example.myapplication.Model.Object.Location;
 import com.example.myapplication.Model.Object.Manufacturer;
 import com.example.myapplication.Model.Object.Place;
 import com.example.myapplication.Model.Object.Rainfall;
@@ -16,6 +17,7 @@ public class Attribute {
     private WindDirection windDirection;
     private WindSpeed windSpeed;
     private Temperature temperature;
+    private Location location;
 
     public Rainfall getRainfall() {
         return rainfall;
@@ -71,5 +73,13 @@ public class Attribute {
 
     public void setWindSpeed(WindSpeed windSpeed) {
         this.windSpeed = windSpeed;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
