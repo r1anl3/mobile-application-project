@@ -11,7 +11,7 @@ public class Device {
     @SerializedName("name")
     private String name;
     @SerializedName("createdOn")
-    private String createdOn;
+    private long createdOn;
 
     private static final List<Device> deviceList = new ArrayList<>();
 
@@ -48,11 +48,11 @@ public class Device {
         this.name = name;
     }
 
-    public String getCreatedOn() {
+    public long getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(long createdOn) {
         this.createdOn = createdOn;
     }
 }
