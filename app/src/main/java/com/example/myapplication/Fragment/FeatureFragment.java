@@ -73,10 +73,10 @@ public class FeatureFragment extends Fragment {
             if (!isOk) return false; // If not ok
 
             setInfo(); // Set info
-            super.onViewCreated(view, savedInstanceState);
 
             return false;
         });
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void InitialViews(View view) {
