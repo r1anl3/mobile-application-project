@@ -1,6 +1,7 @@
 package com.example.myapplication.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -44,7 +45,9 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MapFragment extends Fragment {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
@@ -52,6 +55,7 @@ public class MapFragment extends Fragment {
     Handler handler;
     MapView mapView;
     ImageButton btn_zoomIn, btn_zoomOut;
+    LinearLayout bottomNav;
     double aLat;
     double aLong;
     Attribute attribute;
@@ -83,9 +87,9 @@ public class MapFragment extends Fragment {
             boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
-            setMap(10.869905172970164,106.80345028525176);
-            setMap(aLat, aLong);
-
+            setMap(aLat, aLong, 0);
+            setMap(10.869905172970164,106.80345028525176, 1);
+            bottomNav.setVisibility(View.VISIBLE);
             return false;
         });
         super.onViewCreated(view, savedInstanceState);
@@ -95,10 +99,12 @@ public class MapFragment extends Fragment {
         mapView = view.findViewById(R.id.mv_mapView);
         btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
+        bottomNav = parentActivity.findViewById(R.id.bottom_nav);
     }
 
     private void InitialEvents() {
         getInfo();
+        bottomNav.setVisibility(View.INVISIBLE);
         btn_zoomIn.setOnClickListener(view -> mapView.getController().zoomIn());
         btn_zoomOut.setOnClickListener(view -> mapView.getController().zoomOut());
     }
@@ -132,7 +138,7 @@ public class MapFragment extends Fragment {
         }).start();
     }
 
-    private void setMap(double aLat, double aLong) {
+    private void setMap(double aLat, double aLong, int deviceId) {
         Context ctx = parentActivity.getApplicationContext(); // Get parent activity context
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx)); // Get configuration
 
@@ -160,7 +166,7 @@ public class MapFragment extends Fragment {
         startMarker.setPosition(point); // Set marker position
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER); // Set anchor center by width, height
         startMarker.setOnMarkerClickListener((marker, mapView) -> {
-            showInfo(); // Show info bottom sheet on click marker
+            showInfo(deviceId); // Show device info on click marker
             return true;
         });
         mapView.getOverlays().add(startMarker); // Show marker
@@ -168,7 +174,7 @@ public class MapFragment extends Fragment {
         mapView.getController().setCenter(point); // Center geo point
     }
 
-    private void showInfo() {
+    private void showInfo(int deviceId) {
         // Show assets information
         final Dialog dialog = new Dialog(parentActivity); // Create dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // No title
@@ -184,10 +190,10 @@ public class MapFragment extends Fragment {
         });
 
 
-        String temp = "Temperature: " + attribute.getTemperature().getValue() + "\n";
-        String humid = "Humid: " + attribute.getHumidity().getValue() + "\n";
-        String geo = "Geo: " + aLat + " " + aLong + "\n";
-        String info = temp + humid + geo;
+        String id = "Asset ID: " + Device.getDevicesList().get(deviceId).getId() + "\n";
+        String name = "Device name: " + Device.getDevicesList().get(deviceId).getName() + "\n";
+        String createdOn = "Create on: " + getCreatedOn(Device.getDevicesList().get(deviceId).getCreatedOn())+ "\n";
+        String info = id + name + createdOn;
         tv_info.setText(info); // Set info to bottom sheet
 
         dialog.show(); // Show bottom sheet
@@ -227,5 +233,12 @@ public class MapFragment extends Fragment {
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String getCreatedOn(long timestamp) {
+        Date date = new Date(timestamp); // Get expired date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm"); // Date formatter
+        return dateFormat.format(date); // Return formatted date
     }
 }
