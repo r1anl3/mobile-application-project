@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myapplication.GlobalVar;
@@ -22,8 +25,9 @@ public class ResetPasswordActivity extends BaseActivity {
     EditText et_user;
     Button btn_reset;
     Button btn_back;
-    WebView wv_browser;
     LoadingAlert loadingAlert;
+    Handler handler;
+    ProgressBar pg_loading;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -43,7 +47,7 @@ public class ResetPasswordActivity extends BaseActivity {
         et_user = findViewById(R.id.et_user);
         btn_reset = findViewById(R.id.btn_resetPassword);
         btn_back = findViewById(R.id.btn_back);
-        wv_browser = findViewById(R.id.wv_browser);
+        pg_loading = findViewById(R.id.pg_loading);
         loadingAlert = new LoadingAlert(ResetPasswordActivity.this);
     }
 
@@ -61,14 +65,21 @@ public class ResetPasswordActivity extends BaseActivity {
             openMainActivity();
             finish();
         });
-//        btn_change.setOnClickListener(view -> {
-//            signIn();
-//        });
         btn_reset.setOnClickListener(view -> {
-            loadingAlert.startAlertDialog();
+            btn_reset.setVisibility(View.INVISIBLE);
+            pg_loading.setVisibility(View.VISIBLE);
             resetPws();
-            openMainActivity();
-            finish();
+
+            handler = new Handler(message -> { // Handle message
+                Bundle bundle = message.getData(); // Get message
+                boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+                if (!isOk) return false; // If not ok return
+
+                btn_reset.setVisibility(View.VISIBLE);
+                pg_loading.setVisibility(View.INVISIBLE);
+
+                return false;
+            });
         });
     }
 
@@ -83,7 +94,7 @@ public class ResetPasswordActivity extends BaseActivity {
         CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
 //        wv_browser.setVisibility(View.VISIBLE);
-        wv_browser = new WebView(ResetPasswordActivity.this); // Create new web view
+        WebView wv_browser = new WebView(ResetPasswordActivity.this); // Create new web view
         wv_browser.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         wv_browser.setWebViewClient(new WebViewClient() {
             @Override
@@ -92,8 +103,14 @@ public class ResetPasswordActivity extends BaseActivity {
                 String greenText = "document.getElementsByClassName('green-text')[1].textContent;"; // Appear when username already exist.
                 if (url.contains(GlobalVar.signInUrl)) {
                     view.evaluateJavascript(greenText, green -> {
-                        loadingAlert.closeAlertDialog();
                         Log.d(GlobalVar.LOG_TAG, "green: " + green);
+
+                        Message msg = handler.obtainMessage(); // Create message
+                        Bundle bundle = new Bundle(); // Create bundle
+                        bundle.putBoolean("IS_OK", true); // Put true to bundle
+                        msg.setData(bundle); // Set message data
+                        handler.sendMessage(msg);  // Send message through bundle
+
                         changePassLog(green);
                     });
                 }

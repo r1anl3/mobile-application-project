@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#F3E9FE</color>
+    <color name="navy_blue">#067FD0</color>
+    <color name="midnight_blue">#151A7B</color>
+    <color name="cerise">#E63B60</color>
+    <color name="persian_blue">#223BC9</color>
+    <color name="fountain_blue">#5BAEB7</color>
 </resources>
