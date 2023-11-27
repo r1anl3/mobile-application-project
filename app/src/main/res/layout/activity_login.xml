@@ -140,28 +140,25 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/btn_signIn"
-                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/background_button"
+                android:backgroundTint="@color/navy_blue"
                 android:text="@string/sign_in"
-                android:textColor="#ffffff"
                 android:textSize="20sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/btn_back"
-                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/background_button_2"
+                android:backgroundTint="@color/background"
                 android:text="@string/back"
-                android:textColor="#7164FF"
+                android:textColor="@color/navy_blue"
                 android:textSize="20sp" />
         </LinearLayout>
 
