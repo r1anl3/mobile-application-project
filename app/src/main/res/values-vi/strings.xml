@@ -15,7 +15,7 @@
     <string name="register_suggest">Chưa có tài khoản?</string>
     <string name="language">VN</string>
     <string name="register">Đăng ký ngay</string>
-    <string name="press_alert">Nhấp 2 lần để thoát!</string>
+    <string name="press_alert">Nhấn 2 lần để thoát!</string>
     <string name="greed_user">Chào,</string>
     <string name="password_warning">Mật khẩu không khớp!</string>
     <string name="signup_warning">Không thể đăng ký!</string>
@@ -50,4 +50,5 @@
     <string name="create_on">Đã đăng ký</string>
     <string name="continue_using">Tiếp tục sử dụng</string>
     <string name="continue_log">Vui lòng đăng nhập!</string>
+    <string name="connect_to_drive">Kết nối với Drive</string>
 </resources>

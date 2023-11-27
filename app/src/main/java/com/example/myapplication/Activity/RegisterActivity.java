@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -12,6 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -20,15 +22,12 @@ import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.R;
 
 public class RegisterActivity extends BaseActivity {
-    private EditText et_username;
-    private EditText et_email;
-    private EditText et_password;
-    private EditText et_rePassword;
-    private Button btn_back;
-    private Button btn_signUp;
+    private EditText et_username, et_email, et_password, et_rePassword;
+    private Button btn_back, btn_signUp;
     private ImageButton btn_changeLanguage;
-    private WebView webView;
     private LoadingAlert loadingAlert;
+    private ProgressBar pg_loading;
+    private Handler handler;
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,8 @@ public class RegisterActivity extends BaseActivity {
         et_email = findViewById(R.id.et_mail); // Get email Edit Text
         et_password = findViewById(R.id.et_password); // Get password Edit Text
         et_rePassword = findViewById(R.id.et_rePassword); //Get rePassword Edit Text
-//        webView = findViewById(R.id.wv_browser);
         loadingAlert = new LoadingAlert(RegisterActivity.this);
+        pg_loading = findViewById(R.id.pg_loading);
     }
 
     private void InitEvent() {
@@ -68,11 +67,24 @@ public class RegisterActivity extends BaseActivity {
             String email = et_email.getText().toString(); // Extract email
             String password = et_password.getText().toString(); // Extract password
             String rePassword = et_rePassword.getText().toString(); // Extract rePassword
-            boolean isValidInformation = validateForm(username, email, password, rePassword);
 
+            boolean isValidInformation = validateForm(username, email, password, rePassword);
             if (isValidInformation) { // If information is valid
-                loadingAlert.startAlertDialog();
-                getToken(username, email, password, rePassword);
+                btn_signUp.setVisibility(View.INVISIBLE);
+                pg_loading.setVisibility(View.VISIBLE);
+                authenticateUser(username, email, password, rePassword);
+
+                handler = new Handler(message -> { // Handle message
+                    Bundle bundle = message.getData(); // Get message
+                    boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+                    if (!isOk) return false; // If not ok return
+
+                    signUpLog(getString(R.string.success_warning));
+                    openLogInActivity(); // Open login
+                    finish();
+
+                    return false;
+                });
             }
         });
 
@@ -125,12 +137,12 @@ public class RegisterActivity extends BaseActivity {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void getToken(String username, String email, String password, String rePassword) {
+    private void authenticateUser(String username, String email, String password, String rePassword) {
         // Get sign up token
         CookieManager.getInstance().removeAllCookies(null);
 
 //        webView.setVisibility(View.VISIBLE);
-        webView = new WebView(RegisterActivity.this);
+        WebView webView = new WebView(RegisterActivity.this);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -162,29 +174,38 @@ public class RegisterActivity extends BaseActivity {
                                     view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null); // Submit form
                                 }
                                 else {
-                                    loadingAlert.closeAlertDialog();
                                     Log.d(GlobalVar.LOG_TAG, "red: " + red);
+
+                                    btn_signUp.setVisibility(View.VISIBLE);
+                                    pg_loading.setVisibility(View.INVISIBLE);
+
                                     signUpLog(red);
                                 }
                             });
                         }
                         else { //
-                            loadingAlert.closeAlertDialog();
                             Log.d(GlobalVar.LOG_TAG, "error: " + dErr);
+
+                            btn_signUp.setVisibility(View.VISIBLE);
+                            pg_loading.setVisibility(View.INVISIBLE);
+
                             signUpLog(dErr);
                         }
                     });
                 }
                 else if (url.contains("manager/#state=")) { // Sign up success, open log in
-                    loadingAlert.closeAlertDialog();
                     Log.d(GlobalVar.LOG_TAG, getString(R.string.success_warning));
-                    signUpLog(getString(R.string.success_warning));
-                    openLogInActivity(); // Open login
-                    finish();
+
+                    btn_signUp.setVisibility(View.VISIBLE);
+                    pg_loading.setVisibility(View.INVISIBLE);
+
+                    Message msg = handler.obtainMessage(); // Create message
+                    Bundle bundle = new Bundle(); // Create bundle
+                    bundle.putBoolean("IS_OK", true); // Put true to bundle
+                    msg.setData(bundle); // Set message data
+                    handler.sendMessage(msg);  // Send message through bundle
                 }
 
-                String cookies = CookieManager.getInstance().getCookie(url);
-                Log.d(GlobalVar.LOG_TAG, "return cookie: " + cookies);
                 Log.d(GlobalVar.LOG_TAG, "url: " + url);
                 super.onPageFinished(view,url);
             }

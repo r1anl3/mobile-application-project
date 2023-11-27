@@ -74,6 +74,7 @@
                 android:id="@+id/btn_signIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/persian_blue"
                 android:layout_below="@+id/tv_welcome"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="24dp"
@@ -85,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:backgroundTint="@color/persian_blue"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="24dp"
                 android:layout_below="@+id/btn_signIn"
@@ -94,6 +96,7 @@
                 android:id="@+id/btn_noSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/midnight_blue"
                 android:textSize="16sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/btn_signUp"
@@ -111,5 +114,4 @@
                 android:text="@string/reset_your_password"/>
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>
