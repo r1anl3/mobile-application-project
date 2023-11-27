@@ -5,13 +5,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -20,15 +20,11 @@ import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.R;
 
 public class RegisterActivity extends BaseActivity {
-    private EditText et_username;
-    private EditText et_email;
-    private EditText et_password;
-    private EditText et_rePassword;
-    private Button btn_back;
-    private Button btn_signUp;
+    private EditText et_username, et_email, et_password, et_rePassword;
+    private Button btn_back, btn_signUp;
     private ImageButton btn_changeLanguage;
-    private WebView webView;
     private LoadingAlert loadingAlert;
+    private ProgressBar pg_loading;
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +126,7 @@ public class RegisterActivity extends BaseActivity {
         CookieManager.getInstance().removeAllCookies(null);
 
 //        webView.setVisibility(View.VISIBLE);
-        webView = new WebView(RegisterActivity.this);
+        WebView webView = new WebView(RegisterActivity.this);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override

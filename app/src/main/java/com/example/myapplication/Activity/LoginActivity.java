@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,15 +27,13 @@ import com.example.myapplication.R;
 import java.sql.Timestamp;
 
 public class LoginActivity extends BaseActivity {
-    private Button btn_signIn;
-    private Button btn_back;
-    private ImageButton btn_changeLanguage;
+    private Button btn_signIn, btn_back;
+    private ImageButton btn_changeLanguage, iBtn_google;
     private TextView tv_register;
-    private ImageButton iBtn_google;
     private LoadingAlert loadingAlert;
-    private EditText et_user;
-    private EditText et_password;
-    Handler handler;
+    private EditText et_user, et_password;
+    private Handler handler;
+    private ProgressBar pg_loading;
     private static final String tokenUser = "user";
     private static final String tokenPass = "123";
 
@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
         loadingAlert = new LoadingAlert(LoginActivity.this);
         et_user = findViewById(R.id.et_user);
         et_password = findViewById(R.id.et_password);
-//        webView = findViewById(R.id.wv_browser);
+        pg_loading = findViewById(R.id.pg_loading);
     }
 
     private void InitialEvent() {
@@ -77,7 +77,8 @@ public class LoginActivity extends BaseActivity {
 
             boolean isValidInformation = validateForm(user, password);
             if (isValidInformation) {
-                loadingAlert.startAlertDialog();
+                btn_signIn.setVisibility(View.INVISIBLE);
+                pg_loading.setVisibility(View.VISIBLE);
                 authenticateUser(user, password);
 
                 handler = new Handler(message -> { // Handle message
@@ -85,7 +86,8 @@ public class LoginActivity extends BaseActivity {
                     boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
                     if (!isOk) return false; // If not ok return
 
-                    loadingAlert.closeAlertDialog(); // Close loading
+                    btn_signIn.setVisibility(View.VISIBLE);
+                    pg_loading.setVisibility(View.INVISIBLE);
                     signInLog(getString(R.string.success_warning)); // Print message to user
                     openDashboardActivity(); // Open dashboard activity
                     finish(); // Finish Login activity
@@ -165,8 +167,11 @@ public class LoginActivity extends BaseActivity {
                         view.evaluateJavascript("document.getElementsByTagName('form')[0].submit();", null);
                     }
                     else {
-                        loadingAlert.closeAlertDialog(); // Close loading
                         Log.d(GlobalVar.LOG_TAG, "err: " + err);
+
+                        btn_signIn.setVisibility(View.VISIBLE);
+                        pg_loading.setVisibility(View.INVISIBLE);
+
                         signInLog(err); // Log error
                     }
                 });
