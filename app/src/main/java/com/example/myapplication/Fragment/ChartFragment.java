@@ -17,9 +17,6 @@ import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ChartFragment extends Fragment {
     DashboardActivity parentActivity;
     public ChartFragment() {
@@ -43,7 +40,7 @@ public class ChartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Code here
-        ValueLineChart mCubicValueLineChart = (ValueLineChart) view.findViewById(R.id.pieChart);
+        ValueLineChart mCubicValueLineChart = view.findViewById(R.id.pieChart);
 
         ValueLineSeries series = new ValueLineSeries();
         series.setColor(0xFF56B7F1);
@@ -56,7 +53,7 @@ public class ChartFragment extends Fragment {
         series.addPoint(new ValueLinePoint("Jun", 1.0f));
         series.addPoint(new ValueLinePoint("Jul", 3.5f));
         series.addPoint(new ValueLinePoint("Aug", 2.4f));
-        series.addPoint(new ValueLinePoint("Sep", 2.4f));
+        series.addPoint(new ValueLinePoint("Sep", 5.4f));
         series.addPoint(new ValueLinePoint("Oct", 3.4f));
         series.addPoint(new ValueLinePoint("Nov", .4f));
         series.addPoint(new ValueLinePoint("Dec", 1.3f));
