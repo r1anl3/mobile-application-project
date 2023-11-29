@@ -3,7 +3,7 @@ Android project: Indoor air quality monitoring application
 *Request:
     - Documentation
     - App interface
-    - A Sensor to collect air quality data? (collect data online/background)
+    - API to collect data? (collect data online/background)
     - Local storage
     - Tool to analyze data to find data trend (realtime)
     - Alert in app (when data crossed threshold) 
@@ -15,19 +15,19 @@ Android project: Indoor air quality monitoring application
     - Presentation
 
 *Task:
-    - Create Github repo
+    - Create Github repo (done)
     - UI:
-        - Homepage
-        - Register
-        - Login
+        - Homepage (done)
+        - Register (done)
+        - Login (done)
         - Main Dashboard
         - Setting app
         - ...
     - Activity:
-        - Sign in
-        - Sign up
-        - Authentication
-        - Forget password
-        - Language support
+        - Sign in (on doing)
+        - Sign up (on doing)
+        - Authentication (on doing)
+        - Forget password 
+        - Language support (on doing)
         - ...
-    - API call: unknown
+    - API call: https://uiot.ixxc.dev/swaggera
