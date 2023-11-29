@@ -28,12 +28,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+//import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
 import com.example.myapplication.R;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -55,7 +58,7 @@ public class MapFragment extends Fragment {
     Handler handler;
     MapView mapView;
     ImageButton btn_zoomIn, btn_zoomOut;
-    LinearLayout bottomNav;
+    BottomAppBar bottomNav;
     double aLat;
     double aLong;
     Attribute attribute;
@@ -99,7 +102,7 @@ public class MapFragment extends Fragment {
         mapView = view.findViewById(R.id.mv_mapView);
         btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
-        bottomNav = parentActivity.findViewById(R.id.bottom_nav);
+        bottomNav = parentActivity.findViewById(R.id.bottom_bar);
     }
 
     private void InitialEvents() {
