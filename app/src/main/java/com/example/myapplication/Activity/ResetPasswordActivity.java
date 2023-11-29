@@ -43,6 +43,7 @@ public class ResetPasswordActivity extends BaseActivity {
 
     private void InitialView() {
         // Initial all views
+        setLangIcon();
         btn_language = findViewById(R.id.btn_changeLanguage);
         et_user = findViewById(R.id.et_user);
         btn_reset = findViewById(R.id.btn_resetPassword);
@@ -62,8 +63,7 @@ public class ResetPasswordActivity extends BaseActivity {
             }, 1000);
         });
         btn_back.setOnClickListener(view -> {
-            openMainActivity();
-            finish();
+            onBackPressed();
         });
         btn_reset.setOnClickListener(view -> {
             btn_reset.setVisibility(View.INVISIBLE);
@@ -135,5 +135,11 @@ public class ResetPasswordActivity extends BaseActivity {
 
     private void changePassLog(String msg) {
         Toast.makeText(ResetPasswordActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        openMainActivity();
+        finish();
     }
 }
