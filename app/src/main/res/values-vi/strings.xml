@@ -51,4 +51,8 @@
     <string name="continue_using">Tiếp tục sử dụng</string>
     <string name="continue_log">Vui lòng đăng nhập!</string>
     <string name="connect_to_drive">Kết nối với Drive</string>
+    <string name="home">Trang chủ</string>
+    <string name="feature">Thông tin</string>
+    <string name="chart">Biểu đồ</string>
+    <string name="user">Tài khoản</string>
 </resources>

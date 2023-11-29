@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@mipmap/icon_home"/>
     <item
         android:id="@+id/feature"
-        android:title="Feature"
+        android:title="@string/feature"
         android:icon="@mipmap/icon_feature"/>
     <item
         android:id="@+id/fab"
@@ -14,10 +14,10 @@
         android:enabled="false"/>
     <item
         android:id="@+id/chart"
-        android:title="Chart"
+        android:title="@string/chart"
         android:icon="@mipmap/icon_chart"/>
     <item
         android:id="@+id/user"
-        android:title="User"
+        android:title="@string/user"
         android:icon="@mipmap/icon_user"/>
 </menu>
