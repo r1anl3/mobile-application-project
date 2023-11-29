@@ -54,7 +54,12 @@ public class UserFragment extends Fragment {
             boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
-            setInfo(); // Set info
+            try {
+                setInfo(); // Set info
+            }
+            catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
             return false;
         });

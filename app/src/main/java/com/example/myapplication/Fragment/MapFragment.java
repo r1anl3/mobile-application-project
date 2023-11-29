@@ -93,7 +93,6 @@ public class MapFragment extends Fragment {
             try {
                 setMap(aLat, aLong, 0);
                 setMap(10.869905172970164,106.80345028525176, 1);
-                bottomNav.setVisibility(View.VISIBLE);
             }
             catch (NullPointerException e) {
                 e.printStackTrace();
@@ -113,7 +112,6 @@ public class MapFragment extends Fragment {
 
     private void InitialEvents() {
         getInfo();
-        bottomNav.setVisibility(View.INVISIBLE);
         btn_zoomIn.setOnClickListener(view -> mapView.getController().zoomIn());
         btn_zoomOut.setOnClickListener(view -> mapView.getController().zoomOut());
     }
