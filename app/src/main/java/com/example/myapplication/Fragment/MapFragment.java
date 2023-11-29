@@ -90,9 +90,15 @@ public class MapFragment extends Fragment {
             boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
-            setMap(aLat, aLong, 0);
-            setMap(10.869905172970164,106.80345028525176, 1);
-            bottomNav.setVisibility(View.VISIBLE);
+            try {
+                setMap(aLat, aLong, 0);
+                setMap(10.869905172970164,106.80345028525176, 1);
+                bottomNav.setVisibility(View.VISIBLE);
+            }
+            catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
             return false;
         });
         super.onViewCreated(view, savedInstanceState);
