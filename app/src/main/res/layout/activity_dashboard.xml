@@ -6,12 +6,18 @@
     android:layout_width="match_parent"
     android:theme="@style/Theme.NavBar"
     android:layout_height="match_parent"
-    android:background="@drawable/background_main"
     tools:context=".Activity.DashboardActivity">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main_frame"/>
+
+    <ProgressBar
+        android:id="@+id/pg_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/navy_blue"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:layout_width="match_parent"

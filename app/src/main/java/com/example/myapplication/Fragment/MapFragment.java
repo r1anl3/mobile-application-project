@@ -26,9 +26,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-//import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.Asset;
@@ -53,14 +53,15 @@ import java.util.Date;
 
 public class MapFragment extends Fragment {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    DashboardActivity parentActivity;
-    Handler handler;
-    MapView mapView;
-    ImageButton btn_zoomIn, btn_zoomOut;
-    BottomAppBar bottomNav;
-    double aLat;
-    double aLong;
-    Attribute attribute;
+    private DashboardActivity parentActivity;
+    private Handler handler;
+    private MapView mapView;
+    private ImageButton btn_zoomIn, btn_zoomOut;
+    private BottomAppBar bottomNav;
+    private ProgressBar pg_loading;
+    private double aLat;
+    private double aLong;
+    private Attribute attribute;
 
     public MapFragment() {
         // Required empty public constructor
@@ -89,6 +90,7 @@ public class MapFragment extends Fragment {
             boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
             if (!isOk) return false; // If not ok
 
+            pg_loading.setVisibility(View.INVISIBLE);
             try {
                 setMap(aLat, aLong, 0);
                 setMap(10.869905172970164,106.80345028525176, 1);
@@ -108,6 +110,7 @@ public class MapFragment extends Fragment {
         btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
         bottomNav = parentActivity.findViewById(R.id.bottom_bar);
+        pg_loading = parentActivity.findViewById(R.id.pg_loading);
     }
 
     private void InitialEvents() {
