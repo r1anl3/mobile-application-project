@@ -4,6 +4,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,6 +18,7 @@ import com.example.myapplication.Fragment.UserFragment;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.R;
+import com.example.myapplication.Service.ForegroundService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DashboardActivity extends BaseActivity {
@@ -72,6 +76,19 @@ public class DashboardActivity extends BaseActivity {
             }
             return true;
         });
+        startForegroundService(new Intent(this, ForegroundService.class));
+        checkForegroundServiceRunning();
+    }
+
+    public boolean checkForegroundServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (ForegroundService.class.getName().equals(info.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setApiToken() {

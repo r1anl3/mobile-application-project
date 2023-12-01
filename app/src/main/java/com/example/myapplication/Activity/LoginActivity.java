@@ -24,8 +24,6 @@ import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
-import java.sql.Timestamp;
-
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn, btn_back;
     private ImageButton btn_changeLanguage, iBtn_google;

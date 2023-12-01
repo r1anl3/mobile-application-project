@@ -36,7 +36,6 @@ import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
 import com.example.myapplication.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
