@@ -59,8 +59,8 @@ public class MapFragment extends Fragment {
     private ImageButton btn_zoomIn, btn_zoomOut;
     private BottomAppBar bottomNav;
     private ProgressBar pg_loading;
-    private double aLat;
-    private double aLong;
+    private double aLat, aLat2;
+    private double aLong, aLong2;
     private Attribute attribute;
 
     public MapFragment() {
@@ -93,7 +93,7 @@ public class MapFragment extends Fragment {
             pg_loading.setVisibility(View.INVISIBLE);
             try {
                 setMap(aLat, aLong, 0);
-                setMap(10.869905172970164,106.80345028525176, 1);
+                setMap(aLat2, aLong2, 1);
                 bottomNav.setVisibility(View.VISIBLE);
             }
             catch (NullPointerException e) {
@@ -111,6 +111,8 @@ public class MapFragment extends Fragment {
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
         bottomNav = parentActivity.findViewById(R.id.bottom_bar);
         pg_loading = parentActivity.findViewById(R.id.pg_loading);
+        aLat2 = 10.869905172970164;
+        aLong2 = 106.80345028525176;
     }
 
     private void InitialEvents() {
