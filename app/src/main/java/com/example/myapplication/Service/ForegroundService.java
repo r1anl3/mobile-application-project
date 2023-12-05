@@ -8,16 +8,39 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.myapplication.API.ApiManager;
+import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Model.Device;
+import com.example.myapplication.Model.User;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Thread(() -> {
             while (true) {
-                Log.d("something", "Collecting in background...");
+                Log.d(GlobalVar.LOG_TAG, "Collecting in background...");
+
+                if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
+                    String queryString = "{ \"realm\": { \"name\": \"master\" }}";
+                    JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
+                    ApiManager.queryDevices(query);
+                }
 
                 try {
-                    Thread.sleep(2000);
+                    assert Device.getDevicesList() != null;
+                    String deviceId = Device.getDevicesList().get(0).getId();
+                    Log.d(GlobalVar.LOG_TAG, "Try collecting: " + deviceId);
+
+                    ApiManager.getAsset(deviceId);
+
+                    if (User.getMe() == null) {
+                        ApiManager.getUser();
+                    }
+
+                    Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

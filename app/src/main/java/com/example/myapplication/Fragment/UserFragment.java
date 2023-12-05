@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
@@ -100,9 +99,9 @@ public class UserFragment extends Fragment {
 
     private void getInfo() {
         new Thread(() -> { // new thread
-            if (User.getMe() == null) {
-                ApiManager.getUser(); // Get user
-            }
+//            if (User.getMe() == null) {
+//                ApiManager.getUser(); // Get user
+//            }
 
             Message msg = handler.obtainMessage(); // Create message
             Bundle bundle = new Bundle(); // Create bundle

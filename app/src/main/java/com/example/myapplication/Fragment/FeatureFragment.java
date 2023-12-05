@@ -16,12 +16,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Asset;
-import com.example.myapplication.Model.Device;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
@@ -109,11 +107,11 @@ public class FeatureFragment extends Fragment {
     private void getInfo() {
         // Get information about user, weather assets
         new Thread(() -> { // new thread
-            if (User.getMe() == null) { // If not user
-                ApiManager.getUser(); // Get user
-            }
+//            if (User.getMe() == null) { // If not user
+//                ApiManager.getUser(); // Get user
+//            }
 
-            ApiManager.getAsset(Device.getDevicesList().get(0).getId()); // Get asset
+//            ApiManager.getAsset(Device.getDevicesList().get(0).getId()); // Get asset
 
             Message msg = handler.obtainMessage(); // Create message
             Bundle bundle = new Bundle(); // Create bundle
