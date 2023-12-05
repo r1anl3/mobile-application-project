@@ -10,13 +10,14 @@ import android.util.Log;
 
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Model.Asset;
+import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
 import com.example.myapplication.Model.User;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ForegroundService extends Service {
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Thread(() -> {
@@ -35,6 +36,22 @@ public class ForegroundService extends Service {
                     Log.d(GlobalVar.LOG_TAG, "Try collecting: " + deviceId);
 
                     ApiManager.getAsset(deviceId);
+
+                    if (Asset.getMe() != null) {
+                        Attribute attribute = Asset.getMe().getAttributes();
+                        String location = attribute.getPlace().getValue();
+                        float humid = attribute.getHumidity().getValue();
+                        float temp = attribute.getTemperature().getValue();
+                        float windSpeed = attribute.getWindSpeed().getValue();
+                        float rainFall = attribute.getRainfall().getValue();
+
+                        try {
+                            ApiManager.postLamp(location, humid, temp, windSpeed, rainFall);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     if (User.getMe() == null) {
                         ApiManager.getUser();
