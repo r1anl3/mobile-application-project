@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#37286E"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".Activity.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,15 +34,16 @@
                 android:layout_centerHorizontal="true"
                 app:srcCompat="@drawable/logo3" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_changeLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/language"/>
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Change Language" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -73,30 +74,33 @@
                 android:id="@+id/btn_signIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:backgroundTint="@color/persian_blue"
+                android:layout_below="@+id/tv_welcome"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="24dp"
-                android:layout_below="@+id/tv_welcome"
-                android:text="@string/sign_in" />
+                android:text="@string/sign_in"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btn_signUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:backgroundTint="@color/persian_blue"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="24dp"
                 android:layout_below="@+id/btn_signIn"
                 android:text="@string/sign_up" />
 
             <Button
-                android:id="@+id/btn_signIpWithGoogle"
+                android:id="@+id/btn_noSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/midnight_blue"
                 android:textSize="16sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/btn_signUp"
-                android:text="@string/continue_with_google"/>
+                android:text="@string/continue_using"/>
 
             <Button
                 android:id="@+id/btn_resetPassword"
@@ -110,5 +114,4 @@
                 android:text="@string/reset_your_password"/>
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>
