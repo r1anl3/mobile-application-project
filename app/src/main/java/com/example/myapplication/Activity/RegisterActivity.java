@@ -57,8 +57,7 @@ public class RegisterActivity extends BaseActivity {
         // Initial all event
         btn_back.setOnClickListener(view -> { // Back button
             // Open main activity
-            openMainActivity();
-            finish();
+            onBackPressed();
         });
 
         btn_signUp.setOnClickListener(view -> { // Sign up button
@@ -67,8 +66,13 @@ public class RegisterActivity extends BaseActivity {
             String email = et_email.getText().toString(); // Extract email
             String password = et_password.getText().toString(); // Extract password
             String rePassword = et_rePassword.getText().toString(); // Extract rePassword
-
             boolean isValidInformation = validateForm(username, email, password, rePassword);
+
+            et_username.setEnabled(false);
+            et_email.setEnabled(false);
+            et_password.setEnabled(false);
+            et_rePassword.setEnabled(false);
+
             if (isValidInformation) { // If information is valid
                 btn_signUp.setVisibility(View.INVISIBLE);
                 pg_loading.setVisibility(View.VISIBLE);
@@ -216,5 +220,11 @@ public class RegisterActivity extends BaseActivity {
 
     private void signUpLog(String msg) {
         Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        openMainActivity();
+        finish();
     }
 }

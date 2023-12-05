@@ -24,8 +24,6 @@ import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
 
-import java.sql.Timestamp;
-
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn, btn_back;
     private ImageButton btn_changeLanguage, iBtn_google;
@@ -74,8 +72,10 @@ public class LoginActivity extends BaseActivity {
             // Open sign in method
             String user = String.valueOf(et_user.getText());
             String password = String.valueOf(et_password.getText());
-
             boolean isValidInformation = validateForm(user, password);
+
+            et_user.setEnabled(false);
+            et_password.setEnabled(false);
             if (isValidInformation) {
                 btn_signIn.setVisibility(View.INVISIBLE);
                 pg_loading.setVisibility(View.VISIBLE);
@@ -86,8 +86,6 @@ public class LoginActivity extends BaseActivity {
                     boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
                     if (!isOk) return false; // If not ok return
 
-                    btn_signIn.setVisibility(View.VISIBLE);
-                    pg_loading.setVisibility(View.INVISIBLE);
                     signInLog(getString(R.string.success_warning)); // Print message to user
                     openDashboardActivity(); // Open dashboard activity
                     finish(); // Finish Login activity

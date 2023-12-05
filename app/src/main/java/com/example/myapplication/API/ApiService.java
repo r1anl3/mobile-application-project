@@ -1,7 +1,9 @@
 package com.example.myapplication.API;
 
+import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Device;
+import com.example.myapplication.Model.Lamp;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
 import com.google.gson.JsonObject;
@@ -33,5 +35,15 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("api/master/asset/query")
     Call<List<Device>> queryDevices(@Body JsonObject body);
+
+    @FormUrlEncoded
+    @POST("/post-asset-data.php")
+    Call<Lamp> postLamp(@Field("api_key") String key,
+                        @Field("sensor") String sensor,
+                        @Field("location") String location,
+                        @Field("humid") float humid,
+                        @Field("temp") float temp,
+                        @Field("windSpeed") float windSpeed,
+                        @Field("rainFall") float rainFall);
 
 }

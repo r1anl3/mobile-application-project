@@ -1,7 +1,5 @@
 package com.example.myapplication.Model;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Asset {
     private Attribute attributes;
     private static Asset me;

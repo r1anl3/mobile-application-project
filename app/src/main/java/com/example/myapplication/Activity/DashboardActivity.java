@@ -4,9 +4,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.example.myapplication.API.ApiClient;
 import com.example.myapplication.Fragment.ChartFragment;
@@ -16,15 +18,17 @@ import com.example.myapplication.Fragment.UserFragment;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.R;
+import com.example.myapplication.Service.ForegroundService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DashboardActivity extends BaseActivity {
     private FragmentManager fm;
     private FeatureFragment featureFrag;
-    private ChartFragment devFrag;
+    private ChartFragment chartFrag;
     private MapFragment mapFrag;
     private UserFragment userFrag;
     private Fragment currFrag;
-    private ImageView ic_home, ic_dev, ic_map, ic_user;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,26 +48,47 @@ public class DashboardActivity extends BaseActivity {
         // Initial variables
         fm = getSupportFragmentManager(); // Create Fragment manager
         featureFrag = new FeatureFragment(DashboardActivity.this); // Create Home fragment
-        devFrag = new ChartFragment(DashboardActivity.this);// Create Device fragment
+        chartFrag = new ChartFragment(DashboardActivity.this);// Create Device fragment
         mapFrag = new MapFragment(DashboardActivity.this); // Create Map fragment
         userFrag = new UserFragment(DashboardActivity.this); // Create User fragment
     }
 
     private void InitialViews() {
         // Initial views
-        ic_home = findViewById(R.id.ic_home); // Find home icon
-        ic_dev = findViewById(R.id.ic_dev); // Find device icon
-        ic_map = findViewById(R.id.ic_map); // Find map icon
-        ic_user = findViewById(R.id.ic_user); // Find user icon
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setBackground(null);
     }
 
     private void InitialEvents() {
         // Initial events
         setApiToken(); // Set Api token from local to ApiClient
-        ic_home.setOnClickListener(view -> replaceFragment(mapFrag)); // Replace home fragment
-        ic_dev.setOnClickListener(view -> replaceFragment(devFrag)); // Replace device fragment
-        ic_map.setOnClickListener(view -> replaceFragment(featureFrag)); // Replace map fragment
-        ic_user.setOnClickListener(view -> replaceFragment(userFrag)); // Replace user fragment
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.home) {
+                replaceFragment(mapFrag);
+            } else if (itemId == R.id.feature) {
+                replaceFragment(featureFrag);
+            } else if (itemId == R.id.chart) {
+                replaceFragment(chartFrag);
+            } else if (itemId == R.id.user) {
+                replaceFragment(userFrag);
+            }
+            return true;
+        });
+        startForegroundService(new Intent(this, ForegroundService.class));
+        checkForegroundServiceRunning();
+    }
+
+    public boolean checkForegroundServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (ForegroundService.class.getName().equals(info.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setApiToken() {
