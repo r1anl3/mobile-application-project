@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +13,22 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.R;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
+import java.util.ArrayList;
+
 public class ChartFragment extends Fragment {
     DashboardActivity parentActivity;
+    LineChart lineChart;
+
     public ChartFragment() {
         // Required empty public constructor
     }
@@ -40,25 +50,51 @@ public class ChartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Code here
-        ValueLineChart mCubicValueLineChart = view.findViewById(R.id.pieChart);
+        lineChart = parentActivity.findViewById(R.id.lineChart);
+        LineDataSet lineDataSet = new LineDataSet(lineChartDataSet(),"data set");
+        ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
+        iLineDataSets.add(lineDataSet);
 
-        ValueLineSeries series = new ValueLineSeries();
-        series.setColor(0xFF56B7F1);
+        LineData lineData = new LineData(iLineDataSets);
+        lineChart.setData(lineData);
+        lineChart.invalidate();
 
-        series.addPoint(new ValueLinePoint("Jan", 2.4f));
-        series.addPoint(new ValueLinePoint("Feb", 3.4f));
-        series.addPoint(new ValueLinePoint("Mar", .4f));
-        series.addPoint(new ValueLinePoint("Apr", 1.2f));
-        series.addPoint(new ValueLinePoint("Mai", 2.6f));
-        series.addPoint(new ValueLinePoint("Jun", 1.0f));
-        series.addPoint(new ValueLinePoint("Jul", 3.5f));
-        series.addPoint(new ValueLinePoint("Aug", 2.4f));
-        series.addPoint(new ValueLinePoint("Sep", 5.4f));
-        series.addPoint(new ValueLinePoint("Oct", 3.4f));
-        series.addPoint(new ValueLinePoint("Nov", .4f));
-        series.addPoint(new ValueLinePoint("Dec", 1.3f));
 
-        mCubicValueLineChart.addSeries(series);
-        mCubicValueLineChart.startAnimation();
+        //if you want set background color use below method
+        //lineChart.setBackgroundColor(Color.RED);
+
+        // set text if data are are not available
+        lineChart.setNoDataText("Data not Available");
+
+        //you can modify your line chart graph according to your requirement there are lots of method available in this library
+
+        //now customize line chart
+
+        lineDataSet.setColor(Color.BLUE);
+        lineDataSet.setCircleColor(Color.GREEN);
+        lineDataSet.setDrawCircles(true);
+        lineDataSet.setDrawCircleHole(true);
+        lineDataSet.setLineWidth(5);
+        lineDataSet.setCircleRadius(10);
+        lineDataSet.setCircleHoleRadius(10);
+        lineDataSet.setValueTextSize(10);
+        lineDataSet.setValueTextColor(Color.BLACK);
     }
-}
+
+
+    private ArrayList<Entry> lineChartDataSet(){
+        ArrayList<Entry> dataSet = new ArrayList<Entry>();
+
+        dataSet.add(new Entry(0,40));
+        dataSet.add(new Entry(1,10));
+        dataSet.add(new Entry(2,15));
+        dataSet.add(new Entry(3,12));
+        dataSet.add(new Entry(4,20));
+        dataSet.add(new Entry(5,50));
+        dataSet.add(new Entry(6,23));
+        dataSet.add(new Entry(7,34));
+        dataSet.add(new Entry(8,12));
+        return  dataSet;
+
+
+    }}
