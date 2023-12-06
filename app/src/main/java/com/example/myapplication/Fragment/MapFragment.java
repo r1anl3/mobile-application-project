@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
 import com.example.myapplication.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -50,6 +52,8 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class MapFragment extends Fragment {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
@@ -59,9 +63,11 @@ public class MapFragment extends Fragment {
     private ImageButton btn_zoomIn, btn_zoomOut;
     private BottomAppBar bottomNav;
     private ProgressBar pg_loading;
+    private FloatingActionButton btn_scanner;
     private double aLat, aLat2;
     private double aLong, aLong2;
     private Attribute attribute;
+    private Dictionary<Integer, Integer> iconMarker;
 
     public MapFragment() {
         // Required empty public constructor
@@ -94,6 +100,7 @@ public class MapFragment extends Fragment {
             try {
                 setMap(aLat, aLong, 0);
                 setMap(aLat2, aLong2, 1);
+                btn_scanner.setEnabled(true);
                 bottomNav.setVisibility(View.VISIBLE);
             }
             catch (NullPointerException e) {
@@ -110,14 +117,20 @@ public class MapFragment extends Fragment {
         btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
         bottomNav = parentActivity.findViewById(R.id.bottom_bar);
+        btn_scanner = parentActivity.findViewById(R.id.btn_scanner);
         pg_loading = parentActivity.findViewById(R.id.pg_loading);
         aLat2 = 10.869905172970164;
         aLong2 = 106.80345028525176;
+        iconMarker = new Hashtable<>();
+        iconMarker.put(0, R.mipmap.marker_weather);
+        iconMarker.put(1, R.mipmap.marker_light_bulb);
     }
 
     private void InitialEvents() {
         getInfo();
         bottomNav.setVisibility(View.INVISIBLE);
+        btn_scanner.setEnabled(false);
+        btn_scanner.setOnClickListener(view -> Log.d("something", "InitialEvents: "));
         btn_zoomIn.setOnClickListener(view -> mapView.getController().zoomIn());
         btn_zoomOut.setOnClickListener(view -> mapView.getController().zoomOut());
     }
@@ -177,6 +190,7 @@ public class MapFragment extends Fragment {
 
         Marker startMarker = new Marker(mapView); // Create maker
         startMarker.setPosition(point); // Set marker position
+        startMarker.setIcon(getResources().getDrawable(iconMarker.get(deviceId))); // Set marker icon
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER); // Set anchor center by width, height
         startMarker.setOnMarkerClickListener((marker, mapView) -> {
             showInfo(deviceId); // Show device info on click marker
