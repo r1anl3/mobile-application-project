@@ -5,8 +5,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
@@ -17,23 +21,34 @@ import com.example.myapplication.Model.User;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.ArrayList;
+
 public class ForegroundService extends Service {
+    public static ArrayList<Float> aTemp = new ArrayList<>();
+    public static ArrayList<Float> aHumid = new ArrayList<>();
+    public static ArrayList<Float> aRain = new ArrayList<>();
+    public static ArrayList<Float> aSpeed = new ArrayList<>();
+    public static boolean isApiOk = false;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Thread(() -> {
             while (true) {
+                isApiOk = false;
                 Log.d(GlobalVar.LOG_TAG, "Collecting in background...");
-
-                if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
-                    String queryString = "{ \"realm\": { \"name\": \"master\" }}";
-                    JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
-                    ApiManager.queryDevices(query);
-                }
-
                 try {
+                    if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
+                        String queryString = "{ \"realm\": { \"name\": \"master\" }}";
+                        JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
+                        ApiManager.queryDevices(query);
+                    }
+
                     assert Device.getDevicesList() != null;
                     String deviceId = Device.getDevicesList().get(0).getId();
                     Log.d(GlobalVar.LOG_TAG, "Try collecting: " + deviceId);
+
+                    if (User.getMe() == null) {
+                        ApiManager.getUser();
+                    }
 
                     ApiManager.getAsset(deviceId);
 
@@ -45,6 +60,13 @@ public class ForegroundService extends Service {
                         float windSpeed = attribute.getWindSpeed().getValue();
                         float rainFall = attribute.getRainfall().getValue();
 
+                        aTemp.add(temp);
+                        aHumid.add(humid);
+                        aSpeed.add(windSpeed);
+                        aRain.add(rainFall);
+
+                        isApiOk = true;
+
                         try {
                             ApiManager.postLamp(location, humid, temp, windSpeed, rainFall);
                         }
@@ -52,12 +74,8 @@ public class ForegroundService extends Service {
                             e.printStackTrace();
                         }
                     }
-
-                    if (User.getMe() == null) {
-                        ApiManager.getUser();
-                    }
-
-                    Thread.sleep(60000);
+                    
+                    Thread.sleep(30000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -78,5 +96,16 @@ public class ForegroundService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private void sendStatusToActivity() {
+        Intent intent = new Intent("API_STATUS");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IS_OK", true);
+
+        intent.putExtras(bundle);
+
+        LocalBroadcastManager.getInstance(ForegroundService.this)
+                .sendBroadcast(intent);
     }
 }
