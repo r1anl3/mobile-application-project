@@ -10,4 +10,6 @@
     <color name="fountain_blue">#5BAEB7</color>
     <color name="main">#37286E</color>
     <color name="some_blue">#53C0f9</color>
+    <color name="rain">#A9DCF4</color>
+    <color name="wind">#6FC5AF</color>
 </resources>
