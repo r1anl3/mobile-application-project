@@ -1,32 +1,27 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.Manager.LocalDataManager;
-import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
+import com.example.myapplication.Service.ForegroundService;
 
 public class MainActivity extends BaseActivity {
-    private static final String TAG = "Main Activity";
     private long backPressedTime;
     private Toast mToast;
     private Button btn_signUp, btn_signIn, btn_noSignIn, btn_resetPassword;
     private ImageButton btn_changeLanguage;
     private LoadingAlert loadingAlert;
-    private Handler handler;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -48,6 +43,7 @@ public class MainActivity extends BaseActivity {
         btn_noSignIn = findViewById(R.id.btn_noSignIn);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
         loadingAlert = new LoadingAlert(MainActivity.this);
+        startForegroundService(new Intent(this, ForegroundService.class));
     }
 
     private void InitialEvent() {

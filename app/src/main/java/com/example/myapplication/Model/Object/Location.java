@@ -2,8 +2,6 @@ package com.example.myapplication.Model.Object;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class Location {
     @SerializedName("type")
     private String type;

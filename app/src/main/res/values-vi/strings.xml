@@ -55,4 +55,7 @@
     <string name="feature">Thông tin</string>
     <string name="chart">Biểu đồ</string>
     <string name="user">Tài khoản</string>
+    <string name="temperature">Nhiệt độ</string>
+    <string name="retry">Thử lại</string>
+    <string name="opp">Có gì đó không ổn!</string>
 </resources>

@@ -51,6 +51,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database:20.3.0")

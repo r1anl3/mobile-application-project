@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Device;
+import com.example.myapplication.Model.Lamp;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.Model.User;
 import com.google.gson.JsonObject;
@@ -18,6 +19,7 @@ import retrofit2.Response;
 public class ApiManager {
     private static final ApiClient client = new ApiClient();
     private static final ApiService service = client.getClient().create(ApiService.class);
+    private static final ApiService lampService = client.getLampClient().create(ApiService.class);
 
     public static Token getToken(String user, String pass) {
         // Get token
@@ -91,6 +93,31 @@ public class ApiManager {
                 Log.d(GlobalVar.LOG_TAG, "queryDevices: Not successful");
             }
         } catch (IOException e) { e.printStackTrace();}
+    }
+
+    public static void postLamp(String location,
+                                float humid,
+                                float temp,
+                                float windSpeed,
+                                float rainFall) {
+        Call<Lamp> call = lampService.postLamp(GlobalVar.lamp_server_key,
+                GlobalVar.sensor,
+                location,
+                humid,
+                temp,
+                windSpeed,
+                rainFall); // Call api get token using 4 fields
+        try {
+            Response<Lamp> response = call.execute(); // Get response from server
+            if (response.isSuccessful()) { // If success
+                Lamp lampResponse = response.body(); // Assign response to token
+                Log.d(GlobalVar.LOG_TAG, "postLamp: " + response.code());
+            }
+            else { Log.d(GlobalVar.LOG_TAG, "postLamp: Not Successful"); } // If fail
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(GlobalVar.LOG_TAG, "exception: " + e.getMessage()); // Print exception
+        }
     }
 
 }

@@ -4,18 +4,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.myapplication.API.ApiClient;
 import com.example.myapplication.Fragment.ChartFragment;
+import com.example.myapplication.Fragment.ErrorFragment;
 import com.example.myapplication.Fragment.FeatureFragment;
 import com.example.myapplication.Fragment.MapFragment;
 import com.example.myapplication.Fragment.UserFragment;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.R;
+import com.example.myapplication.Service.ForegroundService;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DashboardActivity extends BaseActivity {
     private FragmentManager fm;
@@ -23,8 +34,11 @@ public class DashboardActivity extends BaseActivity {
     private ChartFragment chartFrag;
     private MapFragment mapFrag;
     private UserFragment userFrag;
+    private ErrorFragment errorFrag;
     private Fragment currFrag;
     private BottomNavigationView bottomNavigationView;
+    private LottieAnimationView pg_loading;
+    private FloatingActionButton btn_scanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,36 +48,36 @@ public class DashboardActivity extends BaseActivity {
         InitialVars();
         InitialViews();
         InitialEvents();
-
-        fm.beginTransaction().add(R.id.main_frame, mapFrag, null).commit(); // Add home fragment on create
-        currFrag = mapFrag;
     }
 
 
     private void InitialVars() {
         // Initial variables
         fm = getSupportFragmentManager(); // Create Fragment manager
-        featureFrag = new FeatureFragment(DashboardActivity.this); // Create Home fragment
         chartFrag = new ChartFragment(DashboardActivity.this);// Create Device fragment
         mapFrag = new MapFragment(DashboardActivity.this); // Create Map fragment
         userFrag = new UserFragment(DashboardActivity.this); // Create User fragment
+        errorFrag = new ErrorFragment(DashboardActivity.this);
     }
 
     private void InitialViews() {
         // Initial views
         bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setBackground(null);
+        pg_loading = findViewById(R.id.pg_loading);
+        btn_scanner = findViewById(R.id.btn_scanner);
     }
 
     private void InitialEvents() {
         // Initial events
-        setApiToken(); // Set Api token from local to ApiClient
+        bottomNavigationView.setBackground(null);
+        bottomNavigationView.setVisibility(View.INVISIBLE);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.home) {
                 replaceFragment(mapFrag);
             } else if (itemId == R.id.feature) {
+                featureFrag = new FeatureFragment(DashboardActivity.this); // Create Home fragment
                 replaceFragment(featureFrag);
             } else if (itemId == R.id.chart) {
                 replaceFragment(chartFrag);
@@ -72,19 +86,31 @@ public class DashboardActivity extends BaseActivity {
             }
             return true;
         });
+        btn_scanner.setEnabled(false);
+        new Handler().postDelayed(() -> {
+            pg_loading.setVisibility(View.INVISIBLE);
+
+            if (ForegroundService.isApiOk) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                btn_scanner.setEnabled(true);
+                replaceFragment(mapFrag);
+            } else {
+                replaceFragment(errorFrag);
+            }
+        }, 4000);
     }
 
-    private void setApiToken() {
-        // Set api token from local database
-        LocalDataManager.Init(DashboardActivity.this); // Create manager
-        Log.d(GlobalVar.LOG_TAG, "Token local: " + LocalDataManager
-                .getToken()
-                .getAccess_token());  // Log token
-        ApiClient.token = LocalDataManager
-                .getToken()
-                .getAccess_token(); // Set token to ApiClient
-        Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
+    public boolean checkForegroundServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (ForegroundService.class.getName().equals(info.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
+
 
     public void replaceFragment(Fragment fragment) {
         // Replace fragment, kill old fragment
@@ -97,12 +123,9 @@ public class DashboardActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (currFrag != mapFrag) { // If not home fragment
-            replaceFragment(mapFrag); // Replace home fragment
-        }
-        else { // In home fragment
-            openMainActivity(); // open main activity
-            finish(); // End Dashboard activity
+        if (currFrag != null) {
+            openMainActivity();
+            finish();
         }
     }
 }

@@ -1,20 +1,21 @@
 package com.example.myapplication.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
@@ -25,7 +26,7 @@ import java.util.Date;
 public class UserFragment extends Fragment {
     DashboardActivity parentActivity;
     TextView tv_username, tv_firstName, tv_lastName, tv_email, tv_enable, tv_CreateOn, tv_realm;
-    Handler handler;
+    Button btn_cloud;
     public UserFragment() {
         // Required empty public constructor
     }
@@ -49,20 +50,6 @@ public class UserFragment extends Fragment {
         InitialViews(view);
         InitialEvents();
 
-        handler = new Handler(message -> { // Handle message
-            Bundle bundle = message.getData(); // Get message
-            boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
-            if (!isOk) return false; // If not ok
-
-            try {
-                setInfo(); // Set info
-            }
-            catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            return false;
-        });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -95,21 +82,13 @@ public class UserFragment extends Fragment {
     }
 
     private void InitialEvents() {
-        getInfo();
-    }
-
-    private void getInfo() {
-        new Thread(() -> { // new thread
-            if (User.getMe() == null) {
-                ApiManager.getUser(); // Get user
-            }
-
-            Message msg = handler.obtainMessage(); // Create message
-            Bundle bundle = new Bundle(); // Create bundle
-            bundle.putBoolean("IS_OK", true); // Put data to bundle
-            msg.setData(bundle); // Set message data
-            handler.sendMessage(msg);  // Send message through bundle
-        }).start();
+        setInfo(); // Set info
+        btn_cloud.setOnClickListener(view -> {
+            Log.d("something", "onClick: ");
+                String webServer = "http://122.248.192.235/asset-data.php";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webServer));
+                startActivity(browserIntent);
+        });
     }
 
     private void InitialViews(View view) {
@@ -120,5 +99,6 @@ public class UserFragment extends Fragment {
         tv_email = view.findViewById(R.id.tv_email);
         tv_enable = view.findViewById(R.id.tv_enabled);
         tv_realm = view.findViewById(R.id.tv_realm);
+        btn_cloud = view.findViewById(R.id.btn_ggDrive);
     }
 }
