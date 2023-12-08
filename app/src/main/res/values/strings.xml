@@ -69,10 +69,6 @@
     <string name="feature">Feature</string>
     <string name="chart">Chart</string>
     <string name="user">User</string>
-    <string name="opp">Opp!</string>
     <string name="retry">Retry</string>
-    <string name="statistics">Statistics</string>
-    <string name="select">Select</string>
-    <string name="show_chart">Show chart</string>
-    <string name="please_select_an_option">Please select an option</string>
+    <string name="opp">Opp!</string>
 </resources>
