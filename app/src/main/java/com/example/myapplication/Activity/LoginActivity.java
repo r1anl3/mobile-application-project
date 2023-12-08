@@ -1,7 +1,6 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,10 +23,6 @@ import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Token;
 import com.example.myapplication.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn, btn_back;
