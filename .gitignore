@@ -1,6 +1,3 @@
 .idea
+local.properties
 .gradle
-.gradle/8.0/executionHistory
-.gradle/8.0/fileHashes
-.gradle/buildOutputCleanup
-.gradle/file-system.probe

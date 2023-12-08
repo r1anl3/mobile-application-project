@@ -1,6 +1,7 @@
 package com.example.myapplication.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import com.example.myapplication.GlobalVar;
 import com.example.myapplication.LoadingAlert;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.R;
+import com.example.myapplication.Service.ForegroundService;
 
 public class MainActivity extends BaseActivity {
     private long backPressedTime;
@@ -41,6 +43,7 @@ public class MainActivity extends BaseActivity {
         btn_noSignIn = findViewById(R.id.btn_noSignIn);
         btn_resetPassword = findViewById(R.id.btn_resetPassword);
         loadingAlert = new LoadingAlert(MainActivity.this);
+        startForegroundService(new Intent(this, ForegroundService.class));
     }
 
     private void InitialEvent() {
