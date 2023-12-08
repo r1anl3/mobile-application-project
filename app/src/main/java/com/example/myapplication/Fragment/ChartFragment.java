@@ -23,8 +23,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ChartFragment extends Fragment {
     DashboardActivity parentActivity;
@@ -34,8 +38,14 @@ public class ChartFragment extends Fragment {
     ArrayList<ILineDataSet> iLineDataSets;
     LineData lineData;
     ImageView btn_sync;
+    TextInputLayout inputLayout;
+    MaterialButton btn_showChart;
+    MaterialAutoCompleteTextView inputTv;
+    private ArrayList<Float> sourceData;
     private final int[] lColor = {R.color.cerise, R.color.some_blue, R.color.wind, R.color.rain};
     private final String[] lLabel = {"Temperature", "Humidity", "Wind speed", "Rain fall"};
+    private int chosenData = 0;
+    private String[] androidStrings;
 
     public ChartFragment() {
         // Required empty public constructor
@@ -65,21 +75,35 @@ public class ChartFragment extends Fragment {
         lineChart = view.findViewById(R.id.lineChart);
         pg_loading = view.findViewById(R.id.pg_loading);
         btn_sync = view.findViewById(R.id.btn_sync);
+        btn_showChart = view.findViewById(R.id.btn_showChart);
+        inputTv = view.findViewById(R.id.inputTV);
+        inputLayout = view.findViewById(R.id.inputLayout);
+        androidStrings = getResources().getStringArray(R.array.options_list);
+        sourceData = new ArrayList<>();
     }
 
     private void InitialEvent() {
-        ArrayList<Float> sourceData = new ArrayList<>();
+        updateChart();
+        btn_showChart.setOnClickListener(view -> {
+            String inputText = inputTv.getText().toString();
 
-        loadingAnimation();
-        btn_sync.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadingAnimation();
+            inputLayout.setError(null);
+
+            if (inputText.isEmpty()) {
+                inputLayout.setError(getString(R.string.please_select_an_option));
+            } else {
+                chosenData = Arrays.asList(androidStrings).indexOf(inputText);
+                updateChart();
             }
+
+            inputTv.getText().clear();
         });
+        btn_sync.setOnClickListener(view -> updateChart());
+    }
 
+    private void updateChart() {
+        loadingAnimation();
 
-        int chosenData = 3;
         switch (chosenData) {
             case 0:
                 sourceData = ForegroundService.aTemp;
@@ -98,12 +122,13 @@ public class ChartFragment extends Fragment {
         int color = ContextCompat.getColor(parentActivity.getApplicationContext(),  lColor[chosenData]);
         String label = lLabel[chosenData];
 
-        chartSetup(sourceData, label);
+        chartSetup(label, color);
         chartUI(color);
     }
 
-    private void chartSetup(ArrayList<Float> sourceData, String label) {
+    private void chartSetup(String label, int color) {
         lineDataSet = new LineDataSet(lineChartDataSet(sourceData), label);
+        lineDataSet.setColor(color);
         iLineDataSets = new ArrayList<>();
         iLineDataSets.add(lineDataSet);
         lineData = new LineData(iLineDataSets);
@@ -122,6 +147,7 @@ public class ChartFragment extends Fragment {
 
     private void chartUI(int color) {
         lineChart.setNoDataText("Data not Available");
+        lineChart.getData().setDrawValues(false);
 
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
