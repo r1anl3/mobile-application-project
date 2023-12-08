@@ -15,10 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +24,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
 import com.example.myapplication.R;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -58,12 +49,8 @@ import java.util.Hashtable;
 public class MapFragment extends Fragment {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private DashboardActivity parentActivity;
-    private Handler handler;
     private MapView mapView;
     private ImageButton btn_zoomIn, btn_zoomOut;
-    private BottomAppBar bottomNav;
-    private ProgressBar pg_loading;
-    private FloatingActionButton btn_scanner;
     private double aLat, aLat2;
     private double aLong, aLong2;
     private Attribute attribute;
@@ -91,24 +78,6 @@ public class MapFragment extends Fragment {
         InitialViews(view);
         InitialEvents();
 
-        handler = new Handler(message -> { // Handle message
-            Bundle bundle = message.getData(); // Get message
-            boolean isOk = bundle.getBoolean("DEVICE_OK"); // Get message data
-            if (!isOk) return false; // If not ok
-
-            pg_loading.setVisibility(View.INVISIBLE);
-            try {
-                setMap(aLat, aLong, 0);
-                setMap(aLat2, aLong2, 1);
-                btn_scanner.setEnabled(true);
-                bottomNav.setVisibility(View.VISIBLE);
-            }
-            catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            return false;
-        });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -116,9 +85,6 @@ public class MapFragment extends Fragment {
         mapView = view.findViewById(R.id.mv_mapView);
         btn_zoomIn = view.findViewById(R.id.btn_zoomIn);
         btn_zoomOut = view.findViewById(R.id.btn_zoomOut);
-        bottomNav = parentActivity.findViewById(R.id.bottom_bar);
-        btn_scanner = parentActivity.findViewById(R.id.btn_scanner);
-        pg_loading = parentActivity.findViewById(R.id.pg_loading);
         aLat2 = 10.869905172970164;
         aLong2 = 106.80345028525176;
         iconMarker = new Hashtable<>();
@@ -128,26 +94,14 @@ public class MapFragment extends Fragment {
 
     private void InitialEvents() {
         getInfo();
-        bottomNav.setVisibility(View.INVISIBLE);
-        btn_scanner.setEnabled(false);
-        btn_scanner.setOnClickListener(view -> Log.d("something", "InitialEvents: "));
         btn_zoomIn.setOnClickListener(view -> mapView.getController().zoomIn());
         btn_zoomOut.setOnClickListener(view -> mapView.getController().zoomOut());
+        setMap(aLat, aLong, 0);
+        setMap(aLat2, aLong2, 1);
     }
     private void getInfo() {
         // Get information about user, weather assets
-        new Thread(() -> { // new thread
-            if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
-                String queryString = "{ \"realm\": { \"name\": \"master\" }}";
-                JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
-                ApiManager.queryDevices(query);
-            }
-
-            if (Asset.getMe() == null) {
-                assert Device.getDevicesList() != null;
-                ApiManager.getAsset(Device.getDevicesList().get(0).getId());
-            }
-
+        if (Asset.getMe() != null) {
             attribute = Asset.getMe().getAttributes();
             aLat = attribute.getLocation()
                     .getGeoPoint()
@@ -155,13 +109,7 @@ public class MapFragment extends Fragment {
             aLong = attribute.getLocation()
                     .getGeoPoint()
                     .getLong();
-
-            Message msg = handler.obtainMessage(); // Create message
-            Bundle bundle = new Bundle(); // Create bundle
-            bundle.putBoolean("DEVICE_OK", true); // Put data to bundle
-            msg.setData(bundle); // Set message data
-            handler.sendMessage(msg);  // Send message through bundle
-        }).start();
+        }
     }
 
     private void setMap(double aLat, double aLong, int deviceId) {

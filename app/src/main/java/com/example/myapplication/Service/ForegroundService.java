@@ -4,16 +4,16 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.util.Log;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
+import com.example.myapplication.API.ApiClient;
 import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.GlobalVar;
+import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Asset;
 import com.example.myapplication.Model.Attribute;
 import com.example.myapplication.Model.Device;
@@ -32,10 +32,12 @@ public class ForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Thread(() -> {
-            while (true) {
-                isApiOk = false;
+            isApiOk = false;
+
+            while (isNetworkConnected()) {
                 Log.d(GlobalVar.LOG_TAG, "Collecting in background...");
                 try {
+                    setApiToken();
                     if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
                         String queryString = "{ \"realm\": { \"name\": \"master\" }}";
                         JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
@@ -98,14 +100,21 @@ public class ForegroundService extends Service {
         return null;
     }
 
-    private void sendStatusToActivity() {
-        Intent intent = new Intent("API_STATUS");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("IS_OK", true);
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        intent.putExtras(bundle);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 
-        LocalBroadcastManager.getInstance(ForegroundService.this)
-                .sendBroadcast(intent);
+    private void setApiToken() {
+        // Set api token from local database
+        LocalDataManager.Init(ForegroundService.this); // Create manager
+        Log.d(GlobalVar.LOG_TAG, "Token local: " + LocalDataManager
+                .getToken()
+                .getAccess_token());  // Log token
+        ApiClient.token = LocalDataManager
+                .getToken()
+                .getAccess_token(); // Set token to ApiClient
+        Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
     }
 }

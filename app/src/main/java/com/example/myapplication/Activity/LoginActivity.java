@@ -76,9 +76,9 @@ public class LoginActivity extends BaseActivity {
 
             et_user.setEnabled(false);
             et_password.setEnabled(false);
+            btn_signIn.setVisibility(View.INVISIBLE);
+            pg_loading.setVisibility(View.VISIBLE);
             if (isValidInformation) {
-                btn_signIn.setVisibility(View.INVISIBLE);
-                pg_loading.setVisibility(View.VISIBLE);
                 try {
                     authenticateUser(user, password);
 
@@ -123,7 +123,7 @@ public class LoginActivity extends BaseActivity {
 
             new Handler().postDelayed(() -> {
                 loadingAlert.closeAlertDialog();
-                signInWithGoogle();
+//                signInWithGoogle();
             },1000);
         });
     }
@@ -151,7 +151,6 @@ public class LoginActivity extends BaseActivity {
         // Authentication
         CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
-//        webView.setVisibility(View.VISIBLE);
         WebView webView = new WebView(LoginActivity.this); // Create new web view
         webView.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         webView.setWebViewClient(new WebViewClient() {
