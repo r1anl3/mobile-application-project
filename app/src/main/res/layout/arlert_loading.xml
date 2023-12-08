@@ -8,7 +8,7 @@
             android:id="@+id/animationView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_rawRes="@raw/animation_loading"
+            app:lottie_rawRes="@raw/animation_free_hand"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:layout_constraintDimensionRatio="1:1"
