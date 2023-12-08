@@ -36,48 +36,48 @@ public class ForegroundService extends Service {
 
             while (isNetworkConnected()) {
                 Log.d(GlobalVar.LOG_TAG, "Collecting in background...");
-                if (!setApiToken()) {
-                    return;
-                }
                 try {
-                    if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
-                        String queryString = "{ \"realm\": { \"name\": \"master\" }}";
-                        JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
-                        ApiManager.queryDevices(query);
-                    }
-
-                    assert Device.getDevicesList() != null;
-                    String deviceId = Device.getDevicesList().get(0).getId();
-                    Log.d(GlobalVar.LOG_TAG, "Try collecting: " + deviceId);
-
-                    if (User.getMe() == null) {
-                        ApiManager.getUser();
-                    }
-
-                    ApiManager.getAsset(deviceId);
-
-                    if (Asset.getMe() != null) {
-                        Attribute attribute = Asset.getMe().getAttributes();
-                        String location = attribute.getPlace().getValue();
-                        float humid = attribute.getHumidity().getValue();
-                        float temp = attribute.getTemperature().getValue();
-                        float windSpeed = attribute.getWindSpeed().getValue();
-                        float rainFall = attribute.getRainfall().getValue();
-
-                        aTemp.add(temp);
-                        aHumid.add(humid);
-                        aSpeed.add(windSpeed);
-                        aRain.add(rainFall);
-
-                        isApiOk = true;
-
-                        try {
-                            ApiManager.postLamp(location, humid, temp, windSpeed, rainFall);
+                    if (setApiToken()) {
+                        if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
+                            String queryString = "{ \"realm\": { \"name\": \"master\" }}";
+                            JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
+                            ApiManager.queryDevices(query);
                         }
-                        catch (Exception e) {
-                            e.printStackTrace();
+
+                        assert Device.getDevicesList() != null;
+                        String deviceId = Device.getDevicesList().get(0).getId();
+                        Log.d(GlobalVar.LOG_TAG, "Try collecting: " + deviceId);
+
+                        if (User.getMe() == null) {
+                            ApiManager.getUser();
+                        }
+
+                        ApiManager.getAsset(deviceId);
+
+                        if (Asset.getMe() != null) {
+                            Attribute attribute = Asset.getMe().getAttributes();
+                            String location = attribute.getPlace().getValue();
+                            float humid = attribute.getHumidity().getValue();
+                            float temp = attribute.getTemperature().getValue();
+                            float windSpeed = attribute.getWindSpeed().getValue();
+                            float rainFall = attribute.getRainfall().getValue();
+
+                            aTemp.add(temp);
+                            aHumid.add(humid);
+                            aSpeed.add(windSpeed);
+                            aRain.add(rainFall);
+
+                            isApiOk = true;
+
+                            try {
+                                ApiManager.postLamp(location, humid, temp, windSpeed, rainFall);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+
                     Thread.sleep(30000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
