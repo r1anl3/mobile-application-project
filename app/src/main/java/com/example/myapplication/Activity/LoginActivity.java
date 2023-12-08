@@ -29,8 +29,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.Timestamp;
-
 public class LoginActivity extends BaseActivity {
     private Button btn_signIn, btn_back;
     private ImageButton btn_changeLanguage, iBtn_google;
@@ -80,26 +78,32 @@ public class LoginActivity extends BaseActivity {
             // Open sign in method
             String user = String.valueOf(et_user.getText());
             String password = String.valueOf(et_password.getText());
-
             boolean isValidInformation = validateForm(user, password);
+
+            et_user.setEnabled(false);
+            et_password.setEnabled(false);
+            btn_signIn.setVisibility(View.INVISIBLE);
+            pg_loading.setVisibility(View.VISIBLE);
             if (isValidInformation) {
-                btn_signIn.setVisibility(View.INVISIBLE);
-                pg_loading.setVisibility(View.VISIBLE);
-                authenticateUser(user, password);
+                try {
+                    authenticateUser(user, password);
 
-                handler = new Handler(message -> { // Handle message
-                    Bundle bundle = message.getData(); // Get message
-                    boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
-                    if (!isOk) return false; // If not ok return
+                    handler = new Handler(message -> { // Handle message
+                        Bundle bundle = message.getData(); // Get message
+                        boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
+                        if (!isOk) return false; // If not ok return
 
-                    btn_signIn.setVisibility(View.VISIBLE);
-                    pg_loading.setVisibility(View.INVISIBLE);
-                    signInLog(getString(R.string.success_warning)); // Print message to user
-                    openDashboardActivity(); // Open dashboard activity
-                    finish(); // Finish Login activity
+                        signInLog(getString(R.string.success_warning)); // Print message to user
+                        openDashboardActivity(); // Open dashboard activity
+                        finish(); // Finish Login activity
 
-                    return false;
-                });
+                        return false;
+                    });
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(GlobalVar.LOG_TAG, "InitialEvent: " + e.getMessage());
+                }
             }
         });
 
@@ -125,7 +129,7 @@ public class LoginActivity extends BaseActivity {
 
             new Handler().postDelayed(() -> {
                 loadingAlert.closeAlertDialog();
-                signInWithGoogle();
+//                signInWithGoogle();
             },1000);
         });
     }
@@ -153,7 +157,6 @@ public class LoginActivity extends BaseActivity {
         // Authentication
         CookieManager.getInstance().removeAllCookies(null); // Remove old cookies
 
-//        webView.setVisibility(View.VISIBLE);
         WebView webView = new WebView(LoginActivity.this); // Create new web view
         webView.getSettings().setJavaScriptEnabled(true); // Enable evaluate javascript
         webView.setWebViewClient(new WebViewClient() {
@@ -204,6 +207,7 @@ public class LoginActivity extends BaseActivity {
             Log.d(GlobalVar.LOG_TAG, "current timestamp: " + currTimeStamp); // Log current time stamp
             LocalDataManager.Init(LoginActivity.this); // Create local data manager
 
+            boolean getNewToken = false;
             boolean havingToken = LocalDataManager.getToken() != null;
             if (havingToken) {
                 long remainingTimeStamp = LocalDataManager.getToken().getExpires_in() - currTimeStamp;
@@ -212,19 +216,25 @@ public class LoginActivity extends BaseActivity {
                     Log.d(GlobalVar.LOG_TAG, "Token expired in: " + remainingTimeStamp); // Log remaining time
                 }
                 else { // If token expired
+                    getNewToken = true;
+                }
+            }
+            else { // If no token found
+                getNewToken = true;
+            }
+
+            if (getNewToken) {
+                try {
                     Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
                     assert token != null; // No null token
                     long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
                     token.setExpires_in(expired); // Set expired timestamp
                     LocalDataManager.setToken(token); // Save token to local
                 }
-            }
-            else { // If no token found
-                Token token = ApiManager.getToken(LoginActivity.tokenUser, LoginActivity.tokenPass); // Get token
-                assert token != null; // No null token
-                long expired = (token.getExpires_in() * 1000) + currTimeStamp; // Expired timestamp in milliseconds
-                token.setExpires_in(expired); // Set expired timestamp
-                LocalDataManager.setToken(token); // Save token to local
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(GlobalVar.LOG_TAG, "getTokenByInfo: " + e.getMessage());
+                }
             }
 
             Message msg = handler.obtainMessage(); // Create message

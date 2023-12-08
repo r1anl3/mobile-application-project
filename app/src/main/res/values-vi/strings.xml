@@ -55,4 +55,10 @@
     <string name="feature">Thông tin</string>
     <string name="chart">Biểu đồ</string>
     <string name="user">Tài khoản</string>
+    <string name="opp">Có gì đó không ổn!</string>
+    <string name="retry">Thử lại</string>
+    <string name="statistics">Thống kê</string>
+    <string name="select">Lựa chọn</string>
+    <string name="show_chart">Hiển thị</string>
+    <string name="please_select_an_option">Vui lòng chọn nguồn</string>
 </resources>

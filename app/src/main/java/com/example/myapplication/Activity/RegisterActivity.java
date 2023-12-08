@@ -66,8 +66,13 @@ public class RegisterActivity extends BaseActivity {
             String email = et_email.getText().toString(); // Extract email
             String password = et_password.getText().toString(); // Extract password
             String rePassword = et_rePassword.getText().toString(); // Extract rePassword
-
             boolean isValidInformation = validateForm(username, email, password, rePassword);
+
+            et_username.setEnabled(false);
+            et_email.setEnabled(false);
+            et_password.setEnabled(false);
+            et_rePassword.setEnabled(false);
+
             if (isValidInformation) { // If information is valid
                 btn_signUp.setVisibility(View.INVISIBLE);
                 pg_loading.setVisibility(View.VISIBLE);

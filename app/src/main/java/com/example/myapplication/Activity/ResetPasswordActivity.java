@@ -62,10 +62,9 @@ public class ResetPasswordActivity extends BaseActivity {
                 onLanguageChange();
             }, 1000);
         });
-        btn_back.setOnClickListener(view -> {
-            onBackPressed();
-        });
+        btn_back.setOnClickListener(view -> onBackPressed());
         btn_reset.setOnClickListener(view -> {
+            et_user.setEnabled(false);
             btn_reset.setVisibility(View.INVISIBLE);
             pg_loading.setVisibility(View.VISIBLE);
             resetPws();
@@ -75,9 +74,9 @@ public class ResetPasswordActivity extends BaseActivity {
                 boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
                 if (!isOk) return false; // If not ok return
 
-                btn_reset.setVisibility(View.VISIBLE);
-                pg_loading.setVisibility(View.INVISIBLE);
-
+                openMainActivity();
+                finish();
+                
                 return false;
             });
         });

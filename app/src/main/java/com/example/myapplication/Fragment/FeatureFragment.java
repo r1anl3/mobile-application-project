@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myapplication.API.ApiManager;
 import com.example.myapplication.Activity.DashboardActivity;
 import com.example.myapplication.GlobalVar;
 import com.example.myapplication.Manager.LocalDataManager;
 import com.example.myapplication.Model.Asset;
-import com.example.myapplication.Model.Device;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
@@ -45,7 +41,6 @@ public class FeatureFragment extends Fragment {
     private TextView tv_manufacture;
     private TextView tv_location;
     private TextView tv_key;
-    Handler handler;
     public FeatureFragment() {
     }
 
@@ -67,20 +62,6 @@ public class FeatureFragment extends Fragment {
         InitialViews(view);
         InitialEvents();
 
-        handler = new Handler(message -> { // Handle message
-            Bundle bundle = message.getData(); // Get message
-            boolean isOk = bundle.getBoolean("IS_OK"); // Get message data
-            if (!isOk) return false; // If not ok
-
-            try {
-                setInfo(); // Set info
-            }
-            catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            return false;
-        });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -103,24 +84,7 @@ public class FeatureFragment extends Fragment {
 
     private void InitialEvents() {
         // Initial events
-        getInfo(); // Get information
-    }
-
-    private void getInfo() {
-        // Get information about user, weather assets
-        new Thread(() -> { // new thread
-            if (User.getMe() == null) { // If not user
-                ApiManager.getUser(); // Get user
-            }
-
-            ApiManager.getAsset(Device.getDevicesList().get(0).getId()); // Get asset
-
-            Message msg = handler.obtainMessage(); // Create message
-            Bundle bundle = new Bundle(); // Create bundle
-            bundle.putBoolean("IS_OK", true); // Put data to bundle
-            msg.setData(bundle); // Set message data
-            handler.sendMessage(msg);  // Send message through bundle
-        }).start();
+        setInfo(); // Set info
     }
 
     private void setInfo() {

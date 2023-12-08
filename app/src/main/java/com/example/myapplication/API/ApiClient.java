@@ -1,6 +1,8 @@
 package com.example.myapplication.API;
 
 import com.example.myapplication.GlobalVar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,6 +44,16 @@ public class ApiClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
+    }
 
+    public Retrofit getLampClient() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        return new Retrofit.Builder()
+                .baseUrl(GlobalVar.LampUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
     }
 }
