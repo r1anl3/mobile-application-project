@@ -21,6 +21,7 @@ import com.example.myapplication.Model.User;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class ForegroundService extends Service {
@@ -37,7 +38,7 @@ public class ForegroundService extends Service {
             while (isNetworkConnected()) {
                 Log.d(GlobalVar.LOG_TAG, "Collecting in background...");
                 try {
-                    if (setApiToken()) {
+                    if (checkCredential()) {
                         if (Device.getDevicesList() == null || Device.getDevicesList().size() == 0) {
                             String queryString = "{ \"realm\": { \"name\": \"master\" }}";
                             JsonObject query = JsonParser.parseString(queryString).getAsJsonObject();
@@ -107,21 +108,34 @@ public class ForegroundService extends Service {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    private boolean setApiToken() {
+    private void setApiToken() {
         // Set api token from local database
         LocalDataManager.Init(ForegroundService.this); // Create manager
-        if (LocalDataManager.getToken() != null) {
-            Log.d(GlobalVar.LOG_TAG, "Token local: " + LocalDataManager
-                    .getToken()
-                    .getAccess_token());  // Log token
-            ApiClient.token = LocalDataManager
-                    .getToken()
-                    .getAccess_token(); // Set token to ApiClient
-            Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + ApiClient.token); // Log ApiClient Token
-            return true;
-        } else {
-            Log.d(GlobalVar.LOG_TAG, "ApiClient Token: " + null); // Log ApiClient Token
-            return false;
+        ApiClient.token = LocalDataManager
+                .getToken()
+                .getAccess_token(); // Set token to ApiClient
+    }
+
+    private boolean checkCredential() {
+        long currTimeStamp = getTimeStamp(); // Get current time stamp
+        Log.d(GlobalVar.LOG_TAG, "current timestamp: " + currTimeStamp); // Log current time stamp
+        LocalDataManager.Init(ForegroundService.this); // Create local data manager
+
+        boolean havingToken = LocalDataManager.getToken() != null;
+        if (havingToken) {
+            long remainingTimeStamp = LocalDataManager.getToken().getExpires_in() - currTimeStamp;
+            boolean notExpired = remainingTimeStamp > 0;
+            if (notExpired) {
+                Log.d(GlobalVar.LOG_TAG, "Token expired in: " + remainingTimeStamp); // Log remaining time
+                setApiToken();
+                return true;
+            }
         }
+        return false;
+    }
+
+    public long getTimeStamp() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // Get system timestamp in milliseconds
+        return timestamp.getTime();
     }
 }
